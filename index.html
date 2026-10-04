@@ -1,0 +1,86 @@
+<!-- index.html – Winston Terminal v1: page skeleton. app.js fills the content. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Winston Terminal – HK/US investment cockpit (demo)</title>
+  <!-- ===== SECTION: FONTS + STYLES ===== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- ===== SECTION: SIDEBAR ===== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="side-brand">
+      <span class="logo">WT</span><span>WINSTON TERMINAL</span>
+      <button class="menu-toggle" id="menu-toggle" data-action="toggle-menu" aria-label="Menu">MENU</button>
+    </div>
+    <nav class="nav" id="nav">
+      <a href="#dashboard" data-page="dashboard">Dashboard</a>
+      <a href="#holdings" data-page="holdings">Holdings</a>
+      <a href="#transactions" data-page="transactions">Transactions</a>
+      <a href="#import" data-page="import">Import / Export</a>
+      <a href="#settings" data-page="settings">Rules &amp; Settings</a>
+      <div class="nav-label">Coming soon</div>
+      <a href="#soon-analyst" data-page="soon-analyst" class="soon">Analyst</a>
+      <a href="#soon-radar" data-page="soon-radar" class="soon">Opportunity Radar</a>
+      <a href="#soon-thesis" data-page="soon-thesis" class="soon">Thesis Tracker</a>
+      <a href="#soon-brief" data-page="soon-brief" class="soon">Morning Brief</a>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <!-- ===== SECTION: HEADER ===== -->
+    <header class="header">
+      <span class="title">WINSTON TERMINAL</span>
+      <span class="clock mono" id="clock" title="Hong Kong time">--:--:-- HKT</span>
+      <span id="mode-badge"></span>
+      <span class="fx-chip mono" id="fx-chip"></span>
+      <a class="checks-chip mono" id="checks-chip" href="#dashboard" data-action="goto-checks">Checks –/7</a>
+    </header>
+
+    <!-- ===== SECTION: STATUS BANNER ===== -->
+    <div id="banner"></div>
+
+    <!-- ===== SECTION: PAGES (filled by app.js) ===== -->
+    <main class="content">
+      <section class="page" id="page-dashboard"></section>
+      <section class="page" id="page-holdings"></section>
+      <section class="page" id="page-transactions"></section>
+      <section class="page" id="page-import"></section>
+      <section class="page" id="page-settings"></section>
+      <section class="page" id="page-soon"></section>
+    </main>
+
+    <!-- ===== SECTION: FOOTER ===== -->
+    <footer class="footer" id="footer">Personal research tool. Not investment advice.</footer>
+  </div>
+
+  <!-- ===== SECTION: FLOATING ANALYST + MODAL + TOAST ===== -->
+  <button class="fab" data-action="toggle-analyst">ANALYST</button>
+  <div class="analyst-panel" id="analyst-panel" hidden>
+    <div class="panel-head"><span class="panel-title">Analyst</span><span class="badge soon-badge">Coming soon</span>
+      <button class="icon-btn" data-action="toggle-analyst" aria-label="Close">×</button></div>
+    <p>In Step 3 a Grok analyst will explain the numbers on this screen. It will only use figures calc.js has already calculated and will never invent one.</p>
+  </div>
+  <div class="modal-overlay" id="modal" hidden>
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="panel-head"><span class="panel-title" id="modal-title">Detail</span>
+        <button class="icon-btn" data-action="close-modal" aria-label="Close">×</button></div>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+  <div class="toast" id="toast" hidden></div>
+  <noscript><p class="noscript">Winston Terminal needs JavaScript switched on.</p></noscript>
+
+  <!-- ===== SECTION: SCRIPTS (order matters: Chart.js, data, calc, app) ===== -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="data.js"></script>
+  <script src="calc.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
+<!-- END OF FILE: index.html -->
