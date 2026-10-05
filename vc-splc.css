@@ -1,0 +1,52 @@
+/* vc-splc.css – Winston Terminal v4: Supply Chain tab (SPLC-style focal map). Loaded after polish.css. */
+
+/* ===== SECTION: CONTROLS + BREADCRUMB ===== */
+.splc-controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; margin-bottom: 8px; }
+.splc-controls select { max-width: 260px; }
+.seg { display: inline-flex; } .seg .btn { border-radius: 0; } .seg .btn:first-child { border-radius: 3px 0 0 3px; } .seg .btn:last-child { border-radius: 0 3px 3px 0; margin-left: -1px; }
+.splc-crumbs { font-size: 12px; margin: 4px 0 8px; } .splc-crumbs a { margin: 0 2px; }
+.splc-shockbar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 12px; padding: 6px 8px; margin-bottom: 8px; background: var(--amber-tint); border: 1px solid rgba(255,176,0,.3); border-radius: 3px; }
+.splc-kpi { margin-left: auto; font-family: var(--mono); } .splc-kpi b { font-size: 14px; }
+
+/* ===== SECTION: MAP + SIDE PANEL LAYOUT ===== */
+.splc-wrap { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 8px; align-items: start; }
+.splc-main { min-width: 0; }
+.splc-wrap.two { grid-template-columns: minmax(0, 1fr); } .splc-wrap.two .splc-side { columns: 2 280px; column-gap: 16px; }
+.splc-scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: 3px; background: #0C1015; }
+.splc-svg { display: block; width: 100%; height: auto; min-width: 760px; } .splc-svg.two { min-width: 1000px; }
+.splc-side { background: #0E1318; } .splc-side h4 { margin: 10px 0 4px; font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--amber); }
+.splc-name { margin-bottom: 6px; font-weight: 600; }
+.splc-warn { color: var(--amber); font-size: 11px; margin: 4px 0; }
+.splc-ok { display: flex; gap: 8px; align-items: center; margin: 4px 0 6px; font-size: 12px; }
+.splc-geo { display: grid; grid-template-columns: 44px 1fr 38px; gap: 6px; align-items: center; font-size: 11px; margin: 2px 0; }
+.splc-geo .bar { height: 6px; background: var(--hover); border-radius: 3px; overflow: hidden; } .splc-geo .bar i { display: block; height: 100%; background: var(--teal); }
+.splc-legend { margin-top: 6px; }
+.splc-swipe { display: none; margin: 0 0 4px; }
+
+/* ===== SECTION: SVG ELEMENTS ===== */
+.splc-svg text { font-family: var(--ui); fill: var(--text); }
+.splc-colh { font: 600 10px var(--ui); letter-spacing: .12em; fill: var(--muted) !important; }
+.splc-grp { font: 600 10px var(--mono); fill: var(--amber) !important; letter-spacing: .06em; }
+.splc-none { font: 10px var(--mono); fill: var(--muted) !important; letter-spacing: .06em; }
+.splc-lbl { font: 500 10px var(--mono); fill: #C9D1DC !important; paint-order: stroke; stroke: #0C1015; stroke-width: 3px; pointer-events: none; }
+.splc-node { cursor: pointer; }
+.splc-node rect { fill: var(--panel); stroke: var(--border); stroke-width: 1; }
+.splc-node:hover rect, .splc-node:focus rect { stroke: var(--amber); }
+.splc-node:focus { outline: none; }
+.splc-node.held rect, .splc-focal.held rect { stroke: var(--teal); stroke-width: 1.5; }
+.splc-node .t1 { font-size: 12px; } .splc-node .tk { font-family: var(--mono); font-weight: 700; } .splc-node .ct { fill: var(--muted); font-size: 10px; }
+.splc-node .t2 { font: 10px var(--mono); fill: #AEB7C4; }
+.splc-focal rect { fill: #151C25; stroke: var(--amber); stroke-width: 1.5; }
+.splc-focal .f1 { font: 700 20px var(--mono); fill: var(--amber); } .splc-focal .f2 { font-size: 12px; font-weight: 600; } .splc-focal .f3 { font: 10px var(--mono); fill: #AEB7C4; }
+.splc-link path { transition: stroke var(--dur-fast); } .splc-link:hover path { stroke-opacity: 1; filter: brightness(1.4); }
+@media (prefers-reduced-motion: reduce) { .splc-link path { transition: none; } }
+
+/* ===== SECTION: SMALLER SCREENS ===== */
+@media (max-width: 1400px) { .splc-wrap { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 900px) {
+  .splc-controls { gap: 8px; } .splc-controls select { max-width: 100%; }
+  .splc-kpi { margin-left: 0; }
+  .splc-swipe { display: block; }
+}
+
+/* END OF FILE: vc-splc.css */

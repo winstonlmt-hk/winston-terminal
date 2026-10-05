@@ -1,0 +1,77 @@
+/* cmd.css – Winston Terminal v4 (plan v3 Phase 2): command line row, suggestions, Ctrl/Cmd+K palette, "?" sheet and guided tour.
+   Restraint: amber glow only on the focused command line; no scanlines, no typing animation; reduced motion respected. */
+
+/* ===== SECTION: COMMAND LINE ROW (inside the sticky header) ===== */
+.cmdbar { flex-basis: 100%; display: flex; align-items: center; gap: 8px; min-width: 0; }
+.cmd { position: relative; flex: 1 1 320px; max-width: 620px; display: flex; align-items: center; gap: 6px; background: #0A0D10; border: 1px solid var(--border); border-radius: 3px; padding: 0 8px; height: 30px; }
+.cmd:focus-within { border-color: var(--amber); box-shadow: 0 0 0 2px rgba(255,176,0,.18); }
+.cmd-prompt { color: var(--amber); font-weight: 700; cursor: text; }
+.cmd-input { flex: 1; min-width: 0; background: transparent; border: none; outline: none; color: var(--text); font: 500 13px var(--mono); text-transform: uppercase; height: 100%; padding: 0; }
+.cmd-input::placeholder { text-transform: none; color: #5D6778; }
+kbd, .cmd-kbd { font: 600 10px var(--mono); color: var(--muted); border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 3px; padding: 0 5px; line-height: 16px; background: var(--hover); }
+.cmd:focus-within .cmd-kbd { display: none; }
+.cmd-pins { display: inline-flex; gap: 6px; flex-wrap: nowrap; overflow: hidden; min-width: 0; }
+.cmd-pin { background: var(--panel); border: 1px solid var(--border); color: var(--text); border-radius: 12px; cursor: pointer; font: 500 11px var(--mono); padding: 2px 8px; white-space: nowrap; }
+.cmd-pin:focus-visible { outline: 1px solid var(--amber); }
+.cmd-pin:hover { border-color: var(--amber); color: var(--amber); }
+.cmd-btn { padding: 4px 8px; min-width: 32px; }
+.tour-btn { margin-left: auto; white-space: nowrap; }
+
+/* ===== SECTION: SUGGESTION LIST (command line + palette) ===== */
+.cmd-list { list-style: none; margin: 0; padding: 4px 0; }
+#cmd-list { position: absolute; left: -1px; right: -1px; top: calc(100% + 2px); z-index: 40; background: var(--panel); border: 1px solid var(--border); border-radius: 3px; box-shadow: 0 8px 24px rgba(0,0,0,.5); max-height: 320px; overflow: auto; }
+.cmd-opt { display: grid; grid-template-columns: minmax(110px, auto) 1fr auto; gap: 10px; align-items: center; padding: 5px 10px; cursor: pointer; font-size: 12px; }
+.cmd-opt .c { color: var(--amber); font-weight: 600; white-space: nowrap; }
+.cmd-opt .l { color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cmd-opt .k { color: var(--muted); font: 10px var(--mono); text-transform: uppercase; letter-spacing: .06em; white-space: nowrap; }
+.cmd-opt:hover, .cmd-opt.sel { background: var(--hover); box-shadow: inset 2px 0 0 var(--amber); }
+.cmd-none { padding: 6px 10px; color: var(--muted); font-size: 12px; }
+
+/* ===== SECTION: OVERLAYS (palette + sheet) ===== */
+.cmd-overlay { position: fixed; inset: 0; z-index: 70; background: rgba(0,0,0,.6); display: flex; justify-content: center; align-items: flex-start; padding: 10vh 12px 12px; overflow: auto; }
+.cmd-overlay[hidden] { display: none; }
+.cmd-box { width: min(640px, 100%); background: var(--panel); border: 1px solid var(--border); border-radius: 4px; box-shadow: 0 16px 48px rgba(0,0,0,.6); }
+.cmd-box-head { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+.cmd-box-head input { flex: 1; min-width: 0; background: transparent; border: none; outline: none; color: var(--text); font: 500 14px var(--mono); }
+.pal-list { max-height: 50vh; overflow: auto; }
+.cmd-box-foot { padding: 6px 12px; border-top: 1px solid var(--border); }
+.sheet-box { width: min(900px, 100%); padding: 12px; }
+.sheet-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.sheet-box h4 { margin: 10px 0 4px; font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--amber); }
+.sheet-t { width: 100%; border-collapse: collapse; }
+.sheet-t td { text-align: left; white-space: normal; font-family: var(--ui); font-size: 12px; padding: 3px 6px; height: auto; border-bottom: 1px solid var(--border); vertical-align: top; }
+.sheet-t td.k { color: var(--amber); white-space: nowrap; font-family: var(--mono); }
+.sheet-t td.note { white-space: nowrap; }
+
+/* ===== SECTION: GUIDED TOUR ===== */
+.tour { position: fixed; inset: 0; z-index: 90; pointer-events: none; }
+.tour[hidden] { display: none; }
+.tour-block { position: fixed; inset: 0; pointer-events: auto; background: transparent; }
+.tour.no-spot .tour-block { background: rgba(0,0,0,.62); }
+.tour-spot { position: fixed; border: 2px solid var(--amber); border-radius: 4px; box-shadow: 0 0 0 9999px rgba(0,0,0,.62); pointer-events: none; transition: left .2s, top .2s, width .2s, height .2s; }
+.tour-card { position: fixed; pointer-events: auto; width: min(380px, calc(100vw - 16px)); background: var(--panel); border: 1px solid var(--amber); border-radius: 4px; padding: 12px; box-shadow: 0 12px 36px rgba(0,0,0,.6); outline: none; }
+.tour-card.centre { left: 50% !important; top: 50% !important; transform: translate(-50%, -50%); width: min(460px, calc(100vw - 16px)); }
+.tour-card.dock { left: 8px !important; right: 8px; bottom: 8px; top: auto !important; width: auto; transform: none; }
+.tour-top { display: flex; align-items: center; gap: 8px; }
+.tour-step { font-size: 11px; color: var(--amber); }
+.tour-bar { flex: 1; height: 3px; background: var(--hover); border-radius: 2px; overflow: hidden; } .tour-bar i { display: block; height: 100%; background: var(--amber); }
+.tour-title { margin: 8px 0 4px; font-size: 15px; color: var(--text); }
+.tour-body { margin: 0 0 10px; font-size: 13px; line-height: 1.5; color: #C9D1DC; }
+.tour-actions { display: flex; gap: 6px; align-items: center; } .tour-sp { flex: 1; }
+body.touring .fab, body.touring .analyst-panel { display: none; }
+@media (prefers-reduced-motion: reduce) { .tour-spot { transition: none; } }
+
+/* ===== SECTION: SMALLER SCREENS ===== */
+@media (max-width: 1280px) { .cmd-pins { display: none; } }
+@media (max-width: 900px) {
+  .cmdbar { flex-wrap: wrap; }
+  .cmd { flex: 1 1 100%; max-width: none; order: 0; }
+  .cmd-kbd { display: none; }
+  .tour-btn { margin-left: 0; flex: 1; }
+  .cmd-input { font-size: 16px; } /* stops iOS zooming into the field */
+  .sheet-grid { grid-template-columns: 1fr; }
+  .cmd-overlay { padding-top: 12px; }
+  .cmd-opt { grid-template-columns: auto 1fr; } .cmd-opt .k { display: none; }
+}
+
+/* END OF FILE: cmd.css */

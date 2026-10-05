@@ -1,4 +1,7 @@
-// app.js – Winston Terminal v1: state, storage, routing, rendering, events. No maths here (see calc.js).
+// app.js – Winston Terminal v4: state, storage, routing, rendering, events. No maths here (see calc.js).
+// v2: pages registered in window.WT_MODULES (e.g. vc-app.js, methodology.js) are routed, rendered and reset from here.
+// v3 (polish foundation): panel source/as-of chips, header data-quality chips, count-up + change flash, focused-panel brackets, watermark, version.
+// v4 (Phase 2): window.WT_APP – a small navigation/display API for cmd.js (command line, palette, tour). Coming-soon pages show plan-v3 modules.
 
 (function () {
   "use strict";
@@ -7,8 +10,10 @@
   const state = {
     mode: "demo", settings: null, demoPrices: {}, my: { holdings: [], transactions: [] },
     pf: null, model: null, page: "dashboard", sort: { key: "valueHKD", dir: -1 }, filter: "ALL",
-    txFilter: "", notices: [], charts: {}, imp: null, today: hktTodayISO()
+    txFilter: "", notices: [], charts: {}, imp: null, today: hktTodayISO(),
+    flashPrev: {}, counted: false, focusKey: null, chart: "loading"
   };
+  const APP_VERSION = "v4.0", APP_BUILD = "2026-10-05";
   const $ = function (id) { return document.getElementById(id); };
 
   /* ===== SECTION: STORAGE (localStorage, keys "winstonTerminal.v1.*") ===== */
@@ -107,6 +112,11 @@
     const m = state.model, ok = m.checksPassed === 7, chip = $("checks-chip");
     chip.textContent = "Checks " + m.checksPassed + "/7 " + (ok ? "✓" : "✗");
     chip.className = "checks-chip mono " + (ok ? "ok" : "bad");
+    const vc = modules().filter(function (x) { return x.status; }).map(function (x) { return x.status(moduleCtx(x.id)); })[0], vchip = $("vc-chip");
+    state.vcStatus = vc || null;
+    if (vchip) { vchip.hidden = !vc; if (vc) { vchip.textContent = vc.label; vchip.className = "dq-chip mono " + (vc.ok ? "ok" : "bad"); } }
+    const f = freshness(), fchip = $("fresh-chip");
+    if (fchip) { fchip.textContent = f.label; fchip.className = "dq-chip mono " + f.cls; fchip.title = f.title; }
   }
   function renderBanner() {
     const m = state.model, lines = [];
@@ -124,21 +134,97 @@
     $("banner").innerHTML = html;
   }
   function renderFooter() {
-    $("footer").textContent = "Personal research tool. Not investment advice." + (state.mode === "demo" ? " Demo data – illustrative prices, not real holdings." : " My Portfolio is stored only in this browser.");
+    $("footer").innerHTML = "Personal research tool. Not investment advice." + (state.mode === "demo" ? " Demo data – illustrative prices, not real holdings." : " My Portfolio is stored only in this browser.") +
+      ' <span class="foot-meta"><a href="#methodology">Methodology</a> · <span class="mono">Winston Terminal ' + APP_VERSION + " · build " + fdate(APP_BUILD) + "</span></span>";
+  }
+  function renderWatermark() {
+    const w = $("watermark"), vc = state.page === "valuechain"; if (!w) return;
+    w.textContent = vc ? "ILLUSTRATIVE DATA · NOT A FORECAST" : "DEMO PORTFOLIO · ILLUSTRATIVE PRICES";
+    w.hidden = !(vc || state.mode === "demo");
+  }
+
+  /* ===== SECTION: POLISH HELPERS (panel chips, freshness, count-up, change flash, focused panel) ===== */
+  // Display only: no portfolio maths here. Freshness compares price dates with today's HKT date.
+  function phead(title, src, asof, actions) {
+    return '<div class="panel-head"><span class="panel-title">' + title + "</span>" + (src ? '<span class="src-chip" title="Source">' + src + "</span>" : "") +
+      (asof ? '<span class="asof">' + asof + "</span>" : "") + (actions ? '<span class="panel-actions">' + actions + "</span>" : "") + "</div>";
+  }
+  function srcPf() { return state.mode === "demo" ? "Demo seed" : "My Portfolio · this browser"; }
+  function priceAsOf() {
+    const dates = state.pf.holdings.map(function (h) { return h.last_price_date; }).filter(Boolean).sort();
+    return "as of " + (dates.length ? fdate(dates[dates.length - 1]) : "—");
+  }
+  function recalcAsOf() { return "recalc " + clockFmt.format(new Date()).slice(0, 5) + " HKT"; }
+  function freshness() {
+    if (state.mode === "demo") return { label: "Demo data", cls: "demo", title: "Illustrative demo prices, not market data" };
+    const hs = state.pf.holdings.filter(function (h) { return state.model.rows.some(function (r) { return r.symbol === h.symbol; }); });
+    if (!hs.length) return { label: "No data", cls: "warn", title: "No open positions in My Portfolio" };
+    const missing = hs.filter(function (h) { return !(Calc.num(h.last_price) > 0) || !h.last_price_date; }).length;
+    if (missing) return { label: missing + " unpriced", cls: "warn", title: "Positions without a last price or price date" };
+    const oldest = hs.map(function (h) { return h.last_price_date; }).sort()[0];
+    return oldest >= state.today ? { label: "Fresh", cls: "ok", title: "Every price is dated today (HKT)" }
+      : { label: "Stale · " + fdate(oldest).slice(0, 6), cls: "warn", title: "Oldest price date " + fdate(oldest) + ". Edit Last to update." };
+  }
+  function reducedMotion() { return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches); }
+  function countUp(root) { // first dashboard render only, <=400 ms, always ends on the exact formatted text
+    if (state.counted) return; state.counted = true;
+    if (reducedMotion() || !window.requestAnimationFrame) return;
+    root.querySelectorAll("[data-cu]").forEach(function (el) {
+      const end = Number(el.getAttribute("data-cu")), f = el.hasAttribute("data-cs") ? fmtS : fmt, final = el.textContent, t0 = performance.now();
+      if (!isFinite(end) || end === 0) return;
+      const step = function (t) {
+        const k = Math.min(Math.max((t - t0) / 400, 0), 1);
+        el.textContent = k < 1 ? f(end * (1 - Math.pow(1 - k, 3)), 0) : final;
+        if (k < 1) requestAnimationFrame(step);
+      };
+      el.textContent = f(0, 0); requestAnimationFrame(step);
+    });
+  }
+  function flash(root, ns) { // 600 ms green/red flash when a [data-fk] value differs from the last render
+    if (!root) return;
+    root.querySelectorAll("[data-fk]").forEach(function (el) {
+      const k = (ns || state.mode) + ":" + el.getAttribute("data-fk"), v = Number(el.getAttribute("data-fv")), prev = state.flashPrev[k];
+      if (prev !== undefined && isFinite(v) && isFinite(prev) && Math.abs(v - prev) > 1e-9 && !reducedMotion()) {
+        el.classList.remove("flash-up", "flash-down"); void el.offsetWidth; el.classList.add(v > prev ? "flash-up" : "flash-down");
+      }
+      if (isFinite(v)) state.flashPrev[k] = v;
+    });
+  }
+  function fk(key, v) { return isFinite(v) ? ' data-fk="' + esc(key) + '" data-fv="' + v + '"' : ""; }
+  function panelKey(p) { const t = p.querySelector(".panel-title, .label, .vc-title"); return t ? t.textContent : null; }
+  function focusPanel(p) {
+    document.querySelectorAll(".panel.is-focused").forEach(function (x) { x.classList.remove("is-focused"); });
+    if (p) { p.classList.add("is-focused"); state.focusKey = panelKey(p); }
+  }
+  function restoreFocus() {
+    if (!state.focusKey) return;
+    const p = Array.prototype.find.call(document.querySelectorAll(".page.active .panel"), function (x) { return panelKey(x) === state.focusKey; });
+    if (p && !p.classList.contains("is-focused")) focusPanel(p);
+  }
+  function afterRender(root, ns) { flash(root, ns); restoreFocus(); }
+
+  /* ===== SECTION: MODULES (extra pages such as the Value Chain Explorer, loaded before app.js) ===== */
+  function modules() { return window.WT_MODULES || []; }
+  function moduleFor(id) { return modules().find(function (m) { return m.id === id; }) || null; }
+  function moduleCtx(id) {
+    return { mode: state.mode, settings: state.settings, model: state.model, pf: state.pf, today: state.today, el: $("page-" + id),
+      h: { fmt: fmt, fmtS: fmtS, pct: pct, wpct: wpct, tone: tone, sym: sym, esc: esc, badge: badge, fdate: fdate, toast: toast,
+        phead: phead, flash: flash, after: function (root, ns) { afterRender(root, ns); renderHeader(); } }, version: APP_VERSION, build: APP_BUILD, chartState: state.chart,
+      dq: { checks: state.model.checksPassed, vc: state.vcStatus || null, fresh: freshness() } };
   }
 
   /* ===== SECTION: ROUTING ===== */
   const PAGES = ["dashboard", "holdings", "transactions", "import", "settings"];
   function route() {
     const h = (location.hash || "#dashboard").slice(1);
-    state.page = PAGES.indexOf(h) >= 0 || /^soon-/.test(h) ? h : "dashboard";
+    state.page = PAGES.indexOf(h) >= 0 || /^soon-/.test(h) || moduleFor(h) ? h : "dashboard";
     document.querySelectorAll(".nav a").forEach(function (a) { a.classList.toggle("active", a.getAttribute("data-page") === state.page); });
     document.querySelectorAll(".page").forEach(function (p) { p.classList.remove("active"); });
     $(/^soon-/.test(state.page) ? "page-soon" : "page-" + state.page).classList.add("active");
     $("sidebar").classList.remove("open");
-    renderPage();
+    renderWatermark(); renderPage();
   }
-  function renderAll() { renderHeader(); renderBanner(); renderFooter(); renderPage(); }
+  function renderAll() { renderHeader(); renderBanner(); renderFooter(); renderWatermark(); renderPage(); }
   function renderPage() {
     const p = state.page;
     if (p === "dashboard") renderDashboard();
@@ -146,7 +232,9 @@
     else if (p === "transactions") renderTransactions();
     else if (p === "import") renderImport();
     else if (p === "settings") renderSettings();
+    else if (moduleFor(p)) moduleFor(p).render(moduleCtx(p));
     else renderSoon(p.replace("soon-", ""));
+    if (!moduleFor(p)) afterRender($(/^soon-/.test(p) ? "page-soon" : "page-" + p));
   }
 
   /* ===== SECTION: DASHBOARD ===== */
@@ -154,12 +242,12 @@
     const m = state.model, t = m.totals, L = m.largest, s = state.settings;
     const mk = {}; m.splits.market.forEach(function (x) { mk[x.key] = x.pct; });
     const empty = m.rows.length === 0;
-    const kpi = function (label, big, sub, drill, cls) {
-      return '<div class="panel kpi s3" data-action="drill" data-drill="' + drill + '"><div class="label">' + label + '</div><div class="big ' + (cls || "") + '">' + big + '</div><div class="sub">' + sub + "</div></div>";
+    const kpi = function (label, big, sub, drill, cls, attrs) {
+      return '<div class="panel kpi s3" data-action="drill" data-drill="' + drill + '"><div class="label">' + label + '</div><div class="big ' + (cls || "") + '"' + (attrs || "") + ">" + big + '</div><div class="sub">' + sub + "</div></div>";
     };
     let html = '<div class="grid">' +
-      kpi("Total Value HKD", empty ? "—" : fmt(t.valueHKD, 0), empty ? "No positions yet" : "Cost HKD " + fmt(t.costHKD, 0) + (t.unpriced ? " · " + t.unpriced + " unpriced" : ""), "value") +
-      kpi("Unrealised P&amp;L HKD", empty ? "—" : fmtS(t.unrealHKD, 0), empty ? "—" : '<span class="' + tone(t.unrealPct, 1) + '">' + pct(t.unrealPct) + "</span> vs cost · Realised " + fmtS(t.realisedHKD, 0), "pnl", tone(t.unrealHKD, 0)) +
+      kpi("Total Value HKD", empty ? "—" : fmt(t.valueHKD, 0), empty ? "No positions yet" : "Cost HKD " + fmt(t.costHKD, 0) + (t.unpriced ? " · " + t.unpriced + " unpriced" : ""), "value", "", empty ? "" : fk("kpi:value", t.valueHKD) + ' data-cu="' + t.valueHKD + '"') +
+      kpi("Unrealised P&amp;L HKD", empty ? "—" : fmtS(t.unrealHKD, 0), empty ? "—" : '<span class="' + tone(t.unrealPct, 1) + '">' + pct(t.unrealPct) + "</span> vs cost · Realised " + fmtS(t.realisedHKD, 0), "pnl", tone(t.unrealHKD, 0), empty ? "" : fk("kpi:pnl", t.unrealHKD) + ' data-cu="' + t.unrealHKD + '" data-cs') +
       kpi("HK / US split", empty ? "—" : fmt(mk.HK || 0, 1) + " / " + fmt(mk.US || 0, 1), "% of value · HK / US", "split") +
       kpi("Largest position", L ? esc(sym(L.symbol)) + " " + wpct(L.weightPct) : "—", L ? esc(L.name) + " · limit " + s.max_weight_pct + "%" : "—", L ? "row:" + esc(L.symbol) : "value", L && L.weightPct > s.max_weight_pct ? "amber" : "") +
       "</div>";
@@ -168,21 +256,19 @@
         const n = f === "ALL" ? m.rows.length : f === "FLAG" ? m.flags.length : m.watch.length;
         return '<button class="chip' + (state.filter === f ? " active" : "") + '" data-action="filter" data-f="' + f + '">' + (f === "ALL" ? "Positions" : f === "FLAG" ? "Flags" : "Watch") + "<b>" + n + "</b></button>";
       }).join("") + '<span class="note">' + asOf() + "</span></div>";
-    html += '<div class="grid"><div class="panel s9 dash-main"><div class="panel-head"><span class="panel-title">Holdings</span><span class="panel-actions note">Click a row for the maths · edit Last to recalculate</span></div>' +
+    html += '<div class="grid"><div class="panel s9 dash-main">' + phead("Holdings", srcPf(), priceAsOf(), '<span class="note">Click a row for the maths · edit Last to recalculate</span>') +
       holdingsTable(false) + '</div><div class="s3 stack dash-side">' +
-      '<div class="panel"><div class="panel-head"><span class="panel-title">By sector</span></div>' + donutBox("sector") + '<div class="note">' + asOf() + "</div></div>" +
-      '<div class="panel"><div class="donuts"><div><div class="panel-head"><span class="panel-title">By market</span></div>' + donutBox("market", true) + '</div><div><div class="panel-head"><span class="panel-title">By currency</span></div>' + donutBox("currency", true) + '</div></div><div class="note">' + asOf() + "</div></div>" +
-      '<div class="panel"><div class="panel-head"><span class="panel-title">Market health</span><span class="panel-actions"><span class="badge soon-badge">Live in Step 2</span></span></div>' +
-      ["HSI", "S&amp;P 500", "USD/HKD"].map(function (n) { return '<div class="kv"><span>' + n + '</span><span class="muted mono">— · Live in Step 2</span></div>'; }).join("") + "</div>" +
+      '<div class="panel">' + phead("By sector", "calc.js", priceAsOf()) + donutBox("sector") + "</div>" +
+      '<div class="panel">' + phead("Market · currency", "calc.js", priceAsOf()) + '<div class="donuts"><div><div class="label">By market</div>' + donutBox("market", true) + '</div><div><div class="label">By currency</div>' + donutBox("currency", true) + "</div></div></div>" +
+      '<div class="panel">' + phead("Market health", "no feed yet", null, '<span class="badge soon-badge">Live data later</span>') +
+      ["HSI", "S&amp;P 500", "USD/HKD"].map(function (n) { return '<div class="kv"><span>' + n + '</span><span class="muted mono">— · not connected</span></div>'; }).join("") + "</div>" +
       checksPanel() + "</div></div>";
-    html += '<div class="grid">' + COMING_SOON.map(function (c) {
-      return '<div class="panel s6 soon-card"><div class="panel-head"><span class="panel-title">' + c.label + '</span><span class="panel-actions"><span class="badge soon-badge">Coming soon</span></span></div><p>' + esc(c.line) + "</p></div>";
-    }).join("") + "</div>";
-    $("page-dashboard").innerHTML = html;
-    drawCharts();
+    html += '<div class="grid">' + COMING_SOON.map(function (c) { return soonCard(c, " s6"); }).join("") + "</div>";
+    const pg = $("page-dashboard"); pg.innerHTML = html;
+    drawCharts(); countUp(pg);
   }
   function checksPanel() {
-    return '<div class="panel" id="checks-panel"><div class="panel-head"><span class="panel-title">Data checks</span><span class="panel-actions mono">' + state.model.checksPassed + "/7</span></div>" +
+    return '<div class="panel" id="checks-panel">' + phead("Data checks", "calc.js", recalcAsOf(), '<span class="mono">' + state.model.checksPassed + "/7</span>") +
       state.model.checks.map(function (c) { return '<div class="check">' + badge(c.pass ? "PASS" : "FAIL") + "<span>" + c.id + ". " + esc(c.label) + '</span><span class="d">' + esc(c.detail) + "</span></div>"; }).join("") + "</div>";
   }
 
@@ -217,8 +303,8 @@
     const body = rows.map(function (r) {
       return '<tr class="click" data-action="drill" data-drill="row:' + esc(r.symbol) + '"><td class="tk">' + esc(sym(r.symbol)) + '</td><td class="l name" title="' + esc(r.name) + '">' + esc(r.name) +
         "</td><td>" + fmt(r.qty, 0) + "</td><td>" + fmt(r.avgCost, 2) + "</td><td>" + priceInput(r) + "</td><td>" + (r.hasPrice ? fmt(r.valueLocal, 2) + ' <span class="muted">' + r.currency + "</span>" : '<span class="muted">no price</span>') +
-        "</td><td>" + fmt(r.valueHKD, 2) + '</td><td class="' + tone(r.unrealHKD) + '">' + fmtS(r.unrealHKD, 2) + '</td><td class="' + tone(r.unrealPct, 1) + '">' + pct(r.unrealPct) +
-        "</td><td>" + wpct(r.weightPct) + '</td><td class="l">' + badge(r.status) + "</td></tr>";
+        "</td><td" + fk("v:" + r.symbol, r.valueHKD) + ">" + fmt(r.valueHKD, 2) + '</td><td class="' + tone(r.unrealHKD) + '"' + fk("u:" + r.symbol, r.unrealHKD) + ">" + fmtS(r.unrealHKD, 2) + '</td><td class="' + tone(r.unrealPct, 1) + '">' + pct(r.unrealPct) +
+        "</td><td" + fk("w:" + r.symbol, r.weightPct) + ">" + wpct(r.weightPct) + '</td><td class="l">' + badge(r.status) + "</td></tr>";
     }).join("") || '<tr><td colspan="11" class="empty">No rows match this filter.</td></tr>';
     const t = m.totals;
     const foot = '<tr class="total"><td class="tk">TOTAL</td><td class="l">' + m.rows.length + ' positions</td><td></td><td></td><td></td><td></td><td>' + fmt(t.valueHKD, 2) +
@@ -257,8 +343,9 @@
     ["sector", "market", "currency"].forEach(function (key) {
       const canvas = $("chart-" + key); if (!canvas) return;
       const split = state.model.splits[key];
-      if (typeof Chart === "undefined") { canvas.parentNode.innerHTML = '<div class="chart-fallback">Chart unavailable – Chart.js didn\'t load (offline?). Figures below are still exact.</div>'; return; }
-      if (!split.length || state.model.totals.valueHKD <= 0) { canvas.parentNode.innerHTML = '<div class="chart-fallback">No priced positions to chart.</div>'; return; }
+      if (typeof Chart === "undefined" && state.chart === "loading") { canvas.parentNode.innerHTML = '<div class="skel chart-skel" title="Loading chart"></div>'; return; }
+      if (typeof Chart === "undefined") { canvas.parentNode.innerHTML = '<div class="chart-fallback state error">Chart unavailable – Chart.js didn\'t load (offline?). Figures below are still exact.</div>'; return; }
+      if (!split.length || state.model.totals.valueHKD <= 0) { canvas.parentNode.innerHTML = '<div class="chart-fallback state">No priced positions to chart.</div>'; return; }
       state.charts[key] = new Chart(canvas, {
         type: "doughnut", plugins: [donutPlugin],
         data: { labels: split.map(function (x) { return x.key; }), datasets: [{ data: split.map(function (x) { return x.valueHKD; }), backgroundColor: split.map(function (x, i) { return CHART_COLORS[i % CHART_COLORS.length]; }), borderColor: "#11161C", borderWidth: 2 }] },
@@ -273,7 +360,10 @@
   }
 
   /* ===== SECTION: DRILL-DOWN MODAL ===== */
-  function openModal(title, html) { $("modal-title").innerHTML = title; $("modal-body").innerHTML = html; $("modal").hidden = false; }
+  function openModal(title, html) {
+    $("modal-title").innerHTML = title; $("modal-body").innerHTML = html; $("modal").hidden = false;
+    const src = $("modal-src"); if (src) src.innerHTML = '<span class="src-chip" title="Source">' + srcPf() + " · calc.js</span>" + '<span class="asof">' + priceAsOf() + "</span>";
+  }
   function closeModal() { $("modal").hidden = true; }
   function simpleTable(head, rows, foot) {
     return '<div class="table-wrap"><table><thead><tr>' + head.map(function (h, i) { return '<th class="' + (i === 0 ? "l" : "") + '">' + h + "</th>"; }).join("") + "</tr></thead><tbody>" +
@@ -341,8 +431,8 @@
         "</td><td>" + fmt(r.qty, 0) + "</td><td>" + priceInput(r) + "</td><td>" + fdate(r.last_price_date) + '</td><td class="l note">' + esc(r.price_note) + "</td><td>" + fmt(r.valueHKD, 2) + "</td><td>" + (r.qty ? wpct(r.weightPct) : "—") +
         '</td><td class="l">' + (r.qty ? badge(r.status) : '<span class="badge soon-badge">Closed</span>') + "</td><td>" + (my && !used ? '<button class="btn danger" data-action="hdel" data-sym="' + esc(r.symbol) + '">Remove</button>' : "") + "</td></tr>";
     }).join("");
-    $("page-holdings").innerHTML = '<div class="panel"><div class="panel-head"><span class="panel-title">Holdings – ' + (my ? "My Portfolio" : "Demo portfolio") + '</span><span class="panel-actions note">' +
-      (my ? "Edit name, sector and price here. Quantities come from transactions." : "Demo names and sectors are fixed. Price edits are kept in this browser until Reset demo data.") + "</span></div>" +
+    $("page-holdings").innerHTML = '<div class="panel">' + phead("Holdings – " + (my ? "My Portfolio" : "Demo portfolio"), srcPf(), priceAsOf(), '<span class="note">' +
+      (my ? "Edit name, sector and price here. Quantities come from transactions." : "Demo names and sectors are fixed. Price edits are kept in this browser until Reset demo data.") + "</span>") +
       (rows ? '<div class="table-wrap"><table><thead><tr><th class="l">Ticker</th><th class="l">Name</th><th class="l">Sector</th><th class="l">Mkt</th><th class="l">Ccy</th><th>Qty</th><th>Last</th><th>Price date</th><th class="l">Price note</th><th>Value HKD</th><th>Weight</th><th class="l">Tag</th><th></th></tr></thead><tbody>' + rows + "</tbody></table></div>"
         : '<div class="empty">No holdings yet. Holdings are created when you add a transaction or import a CSV.</div>') + "</div>";
   }
@@ -370,7 +460,7 @@
         '</td><td class="l">' + esc(t.currency) + "</td><td>" + fmt(Calc.num(t.fees) || 0, 2) + '</td><td class="l note">' + esc(t.note || "") + '</td><td class="l note">' + esc(t.source || "") +
         "</td><td>" + (my ? '<button class="btn danger" data-action="tx-del" data-i="' + x.i + '">Delete</button>' : "") + "</td></tr>";
     }).join("");
-    $("page-transactions").innerHTML = '<div class="stack">' + form + '<div class="panel"><div class="panel-head"><span class="panel-title">Transactions (' + state.pf.transactions.length + ')</span><span class="panel-actions"><input id="tx-filter" data-action="tx-filter" placeholder="Filter ticker or type" value="' + esc(state.txFilter) + '"></span></div>' +
+    $("page-transactions").innerHTML = '<div class="stack">' + form + '<div class="panel">' + phead("Transactions (" + state.pf.transactions.length + ")", srcPf(), null, '<input id="tx-filter" data-action="tx-filter" placeholder="Filter ticker or type" value="' + esc(state.txFilter) + '">') +
       (rows ? '<div class="table-wrap"><table><thead><tr><th>Date</th><th class="l">Ticker</th><th class="l">Type</th><th>Qty</th><th>Price</th><th class="l">Ccy</th><th>Fees</th><th class="l">Note</th><th class="l">Source</th><th></th></tr></thead><tbody>' + rows + "</tbody></table></div>"
         : '<div class="empty">' + (state.pf.transactions.length ? "No transactions match the filter." : "No transactions yet.") + "</div>") + "</div></div>";
   }
@@ -389,7 +479,7 @@
   /* ===== SECTION: IMPORT / EXPORT PAGE ===== */
   function renderImport() {
     const imp = state.imp;
-    let html = '<div class="grid"><div class="panel s8"><div class="panel-head"><span class="panel-title">CSV import → My Portfolio</span><span class="panel-actions"><button class="btn" data-action="template">CSV template</button></span></div>' +
+    let html = '<div class="grid"><div class="panel s8">' + phead("CSV import → My Portfolio", "your CSV file", null, '<button class="btn" data-action="template">CSV template</button>') +
       '<div class="row-actions"><input type="file" id="csv-file" accept=".csv,text/csv,text/plain" data-action="csv-file"><span class="note">or paste below</span></div>' +
       '<textarea id="csv-text" placeholder="date,ticker,type,qty,price,currency,fees">' + esc(imp ? imp.text : "") + '</textarea><div class="row-actions"><button class="btn" data-action="csv-preview">Preview</button>' +
       '<span class="note">Columns: date, ticker, type (BUY/SELL/DIV/FEE), qty, price, currency, fees. Dates YYYY-MM-DD or DD/MM/YYYY.</span></div>';
@@ -409,9 +499,9 @@
         '<button class="btn primary" data-action="imp-confirm"' + (c.ok + (imp.includeDups ? c.duplicate : 0) ? "" : " disabled") + ">3. Import " + (c.ok + (imp.includeDups ? c.duplicate : 0)) + " row(s) into My Portfolio</button></div>";
     }
     if (imp && imp.result) html += '<div class="row-actions mono" id="imp-result">' + esc(imp.result) + "</div>";
-    html += '</div><div class="s4 stack"><div class="panel"><div class="panel-head"><span class="panel-title">Export – ' + (state.mode === "demo" ? "Demo" : "My Portfolio") + '</span></div>' +
+    html += '</div><div class="s4 stack"><div class="panel">' + phead("Export – " + (state.mode === "demo" ? "Demo" : "My Portfolio"), srcPf()) +
       '<div class="row-actions"><button class="btn" data-action="exp-holdings">Holdings CSV</button><button class="btn" data-action="exp-tx">Transactions CSV</button></div></div>' +
-      '<div class="panel"><div class="panel-head"><span class="panel-title">Backup – My Portfolio</span></div><div class="row-actions"><button class="btn" data-action="exp-json">JSON backup</button>' +
+      '<div class="panel">' + phead("Backup – My Portfolio", "this browser") + '<div class="row-actions"><button class="btn" data-action="exp-json">JSON backup</button>' +
       '<label class="btn">Restore JSON<input type="file" id="json-file" accept=".json,application/json" data-action="json-file" hidden></label></div>' +
       '<p class="note">My Portfolio has ' + state.my.holdings.length + " holdings and " + state.my.transactions.length + " transactions, saved only in this browser.</p></div></div></div>";
     $("page-import").innerHTML = html;
@@ -454,7 +544,7 @@
   ];
   function renderSettings() {
     const s = state.settings, demo = state.mode === "demo";
-    $("page-settings").innerHTML = '<div class="grid"><div class="panel s6"><div class="panel-head"><span class="panel-title">Rules &amp; FX</span><span class="panel-actions note">Changes recalculate instantly</span></div><div class="form-grid">' +
+    $("page-settings").innerHTML = '<div class="grid"><div class="panel s6">' + phead("Rules &amp; FX", "this browser", "FX as of " + fdate(s.rate_as_of), '<span class="note">Changes recalculate instantly</span>') + '<div class="form-grid">' +
       SETTING_FIELDS.map(function (f) { return '<label class="field"><span class="label">' + f[1] + '</span><input class="num" type="number" min="0" step="' + f[2] + '" data-action="setting" data-k="' + f[0] + '" value="' + s[f[0]] + '"></label>'; }).join("") +
       '<label class="field"><span class="label">Rate as of</span><input type="date" data-action="setting" data-k="rate_as_of" value="' + esc(s.rate_as_of) + '"></label></div>' +
       '<p class="note">Flag = weight above the max, or last price more than the max % below average cost. Watch = past a watch level but not flagged. Data check 7 expects USD/HKD between 7.75 and 7.85.</p>' +
@@ -462,7 +552,8 @@
       '<div class="panel s6"><div class="panel-head"><span class="panel-title">Portfolio</span></div><div class="row-actions">' +
       '<button class="btn' + (demo ? " on" : "") + '" data-action="mode" data-m="demo">Demo portfolio</button><button class="btn' + (!demo ? " on" : "") + '" data-action="mode" data-m="my">My Portfolio</button></div>' +
       '<div class="row-actions"><button class="btn danger" data-action="reset-demo">Reset demo data</button><button class="btn danger" data-action="clear-my">Clear My Portfolio</button></div>' +
-      '<p class="note">Reset demo data restores the original demo prices and the default rules (20 / 15 / 15 / 10, USD/HKD 7.80). Clear My Portfolio deletes your holdings and transactions from this browser. Both ask first. Download a JSON backup before clearing.</p></div></div>';
+      '<p class="note">Reset demo data restores the original demo prices and the default rules (20 / 15 / 15 / 10, USD/HKD 7.80). Clear My Portfolio deletes your holdings and transactions from this browser. Both ask first. Download a JSON backup before clearing.</p></div></div><div id="module-settings"></div>';
+    modules().forEach(function (m) { if (m.renderSettings) m.renderSettings($("module-settings")); });
   }
   function updateSetting(k, raw) {
     if (k === "rate_as_of") { if (Calc.parseDate(raw)) state.settings.rate_as_of = raw; }
@@ -475,9 +566,13 @@
   }
 
   /* ===== SECTION: COMING SOON PAGES ===== */
+  function soonCard(c, cls) {
+    return '<div class="panel soon-card' + (cls || "") + '">' + phead(esc(c.label), null, null, '<span class="badge soon-badge">Coming soon</span>') + "<p>" + esc(c.line) + "</p>" +
+      '<p class="note">' + (c.phase ? "Planned · Phase " + c.phase + " of plan v3" : "") + (c.cmd ? ' · command <span class="mono">' + esc(c.cmd) + "</span>" : "") + "</p></div>";
+  }
   function renderSoon(id) {
     const c = COMING_SOON.find(function (x) { return x.id === id; }) || COMING_SOON[0];
-    $("page-soon").innerHTML = '<div class="panel soon-card"><div class="panel-head"><span class="panel-title">' + c.label + '</span><span class="panel-actions"><span class="badge soon-badge">Coming soon</span></span></div><p>' + esc(c.line) + "</p></div>";
+    $("page-soon").innerHTML = soonCard(c);
   }
 
   /* ===== SECTION: ACTIONS ===== */
@@ -491,7 +586,7 @@
     }
     recalc();
   }
-  function setMode(m) { state.mode = m === "my" ? "my" : "demo"; save(STORAGE_KEYS.mode, state.mode); state.filter = "ALL"; recalc(); }
+  function setMode(m) { state.mode = m === "my" ? "my" : "demo"; save(STORAGE_KEYS.mode, state.mode); state.filter = "ALL"; state.flashPrev = {}; recalc(); }
   function toast(msg, isError) {
     const t = $("toast"); t.textContent = msg; t.className = "toast" + (isError ? " error" : ""); t.hidden = false;
     clearTimeout(toast.timer); toast.timer = setTimeout(function () { t.hidden = true; }, 3500);
@@ -519,11 +614,13 @@
     else if (a === "dismiss-notice") { state.notices.splice(+el.getAttribute("data-i"), 1); renderBanner(); }
     else if (a === "mode") setMode(el.getAttribute("data-m"));
     else if (a === "reset-demo") {
-      if (!window.confirm("Reset demo data? This restores the original demo prices and the default rules and FX rate.")) return;
+      if (!window.confirm("Reset demo data? This restores the original demo prices, the default rules and FX rate, and the value-chain demo mapping and rules.")) return;
+      modules().forEach(function (m) { if (m.onResetDemo) m.onResetDemo(); });
       state.demoPrices = {}; save(STORAGE_KEYS.demoPrices, {}); state.settings = cleanSettings(buildDemoPortfolio(state.today).settings); save(STORAGE_KEYS.settings, state.settings);
       recalc(); toast("Demo data reset.");
     } else if (a === "clear-my") {
       if (!window.confirm("Clear My Portfolio? This deletes all your holdings and transactions from this browser.")) return;
+      modules().forEach(function (m) { if (m.onClearMy) m.onClearMy(); });
       state.my = { holdings: [], transactions: [] }; saveMy(); recalc(); toast("My Portfolio cleared.");
     } else if (a === "tx-add") addTransaction();
     else if (a === "tx-del") { if (window.confirm("Delete this transaction?")) { state.my.transactions.splice(+el.getAttribute("data-i"), 1); saveMy(); recalc(); } }
@@ -555,15 +652,41 @@
     if (e.key === "Enter" && e.target.classList && e.target.classList.contains("price")) e.target.blur();
   });
   window.addEventListener("hashchange", route);
+  ["mousedown", "focusin"].forEach(function (ev) {
+    document.addEventListener(ev, function (e) { const p = e.target.closest && e.target.closest(".content .panel"); if (p) focusPanel(p); });
+  });
+
+  /* ===== SECTION: COMMAND API (window.WT_APP, used by cmd.js – navigation and display only, no maths) ===== */
+  window.WT_APP = {
+    go: function (page) { if ((location.hash || "#dashboard") === "#" + page) route(); else location.hash = "#" + page; },
+    page: function () { return state.page; },
+    mode: function () { return state.mode; },
+    setMode: function (m) { setMode(m); },
+    holdings: function () { return state.model ? state.model.rows.map(function (r) { return { symbol: r.symbol, name: r.name }; }) : []; },
+    isHeld: function (s) { return !!(state.model && state.model.rows.some(function (r) { return r.symbol === s; })); },
+    drill: function (key) { drill(key); },
+    closeModal: closeModal,
+    showChecks: function () { if (state.page !== "dashboard") location.hash = "#dashboard"; setTimeout(function () { const p = $("checks-panel"); if (p) { p.scrollIntoView({ block: "center" }); focusPanel(p); } }, 60); },
+    analyst: function (open) { $("analyst-panel").hidden = !open; },
+    module: function (id) { return moduleFor(id); },
+    toast: toast, sym: sym, esc: esc, version: APP_VERSION
+  };
 
   /* ===== SECTION: START ===== */
   function start() {
     loadAll();
-    if (typeof Chart === "undefined") state.notices.push("Chart.js didn't load (offline?), so donuts are hidden. All figures and checks still work.");
-    else Chart.defaults.color = "#8A94A6";
+    const cdn = $("chartjs-cdn"), chartFailed = function () { state.chart = "failed"; state.notices.push("Chart.js didn't load (offline?), so donuts are hidden. All figures and checks still work."); };
+    if (typeof Chart !== "undefined") { state.chart = "ready"; Chart.defaults.color = "#8A94A6"; }
+    else if (window.WT_CHART_STATE === "failed" || !cdn) chartFailed();
+    else { // lazy: Chart.js arrives after first paint, then the current page redraws with charts
+      cdn.addEventListener("load", function () { if (typeof Chart === "undefined") { chartFailed(); renderBanner(); } else { state.chart = "ready"; Chart.defaults.color = "#8A94A6"; } renderPage(); });
+      cdn.addEventListener("error", function () { chartFailed(); renderBanner(); renderPage(); });
+    }
     state.pf = state.mode === "demo" ? demoPortfolio() : state.my;
     state.model = Calc.computePortfolio(state.pf.holdings, state.pf.transactions, state.settings);
     tick(); setInterval(tick, 1000);
+    const sk = $("load-skel"); if (sk) sk.parentNode.removeChild(sk);
+    document.body.classList.remove("is-loading");
     renderHeader(); renderBanner(); renderFooter(); route();
   }
   start();

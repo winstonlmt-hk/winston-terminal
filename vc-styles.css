@@ -1,0 +1,68 @@
+/* vc-styles.css – Winston Terminal v2: Value Chain Explorer styles (same palette as styles.css) */
+
+/* ===== SECTION: PAGE HEAD + TABS ===== */
+.vc-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+.vc-title { font-weight: 700; letter-spacing: .12em; color: var(--amber); }
+.vc-illus { background: var(--amber); color: #000; }
+.vc-checks-chip { margin-left: auto; font-size: 12px; padding: 2px 8px; border-radius: 10px; }
+.vc-checks-chip.ok { color: var(--green); background: rgba(0,193,118,.15); }
+.vc-checks-chip.bad { color: #fff; background: var(--red); }
+.vc-tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--border); margin-bottom: 8px; flex-wrap: wrap; }
+.vc-tab { background: none; border: none; border-bottom: 2px solid transparent; color: var(--muted); padding: 6px 12px; font: 600 12px var(--ui); cursor: pointer; text-transform: uppercase; letter-spacing: .06em; }
+.vc-tab:hover { color: var(--text); }
+.vc-tab.active { color: var(--amber); border-bottom-color: var(--amber); }
+#page-valuechain .banner { margin-bottom: 8px; border: 1px solid var(--border); border-radius: 4px; }
+#page-valuechain .panel { margin-bottom: 8px; }
+#page-valuechain .grid .panel { margin-bottom: 0; }
+.vc-disclaimer { color: var(--yellow); font-size: 12px; }
+.vc-big { font-size: 22px; margin: 4px 0 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.teal { color: var(--teal); }
+
+/* ===== SECTION: CHAIN MAP ===== */
+.vc-map { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 4px; margin: 8px 0; }
+.vc-lane { background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 4px; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.vc-lane-head { font-size: 10px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); min-height: 30px; cursor: help; border-bottom: 1px solid var(--border); padding-bottom: 3px; }
+.vc-chip { border-radius: 3px; padding: 4px 5px; cursor: pointer; font-size: 11px; line-height: 1.25; border: 1px solid transparent; display: flex; flex-direction: column; min-width: 0; }
+.vc-chip b { font-size: 11px; }
+.vc-chip-name, .vc-chip-sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 10px; opacity: .85; }
+.vc-chip.vc-self { outline: 2px solid var(--text); }
+.vc-chip.vc-sup { outline: 2px solid var(--teal); }
+.vc-chip.vc-cus { outline: 2px solid var(--amber); }
+.vc-legend { display: flex; flex-wrap: wrap; gap: 10px; font-size: 11px; align-items: center; margin: 4px 0; }
+.vc-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: -1px; }
+
+/* ===== SECTION: DRAWER ===== */
+.vc-drawer { position: fixed; top: 0; right: 0; bottom: 0; width: 360px; max-width: 100vw; z-index: 45; background: var(--panel); border-left: 1px solid var(--border); padding: 12px; overflow-y: auto; }
+.vc-drawer h4 { margin: 12px 0 4px; font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--amber); }
+.vc-list { list-style: none; margin: 0; padding: 0; font-size: 12px; }
+.vc-list li { padding: 2px 0; border-bottom: 1px solid #151B22; }
+
+/* ===== SECTION: PROFIT POOLS (Marimekko in plain HTML/CSS) ===== */
+.vc-headline { font-size: 14px; margin: 0 0 8px; }
+.vc-mekko { display: flex; align-items: flex-end; height: 240px; border-bottom: 1px solid var(--border); border-left: 1px solid var(--border); gap: 1px; }
+.vc-col { min-width: 4px; height: 100%; display: flex; align-items: flex-end; }
+.vc-bar { width: 100%; position: relative; overflow: hidden; }
+.vc-bar-label { position: absolute; left: 4px; top: 4px; font-size: 10px; color: #0A0D10; font-weight: 600; line-height: 1.2; }
+.vc-chart-tall { height: 260px; }
+
+/* ===== SECTION: TABLES + FORMS ===== */
+.vc-scroll { max-height: 360px; }
+.vc-hx-line { display: flex; gap: 4px; align-items: center; margin: 2px 0; flex-wrap: wrap; }
+.vc-hx-line input.num { width: 64px; }
+.vc-hx-line .icon-btn { margin-left: 0; }
+tr.vc-selrow td { background: rgba(46,196,182,.12); }
+
+/* ===== SECTION: LAPTOP + MOBILE ===== */
+@media (max-width: 1400px) and (min-width: 901px) {
+  .vc-chip-name { display: none; }
+}
+@media (max-width: 900px) {
+  .vc-map { grid-template-columns: 1fr; }
+  .vc-lane { flex-direction: row; flex-wrap: wrap; align-items: stretch; }
+  .vc-lane-head { width: 100%; min-height: 0; }
+  .vc-chip { width: calc(33% - 4px); }
+  .vc-drawer { width: 100vw; }
+  .vc-mekko { height: 180px; }
+}
+
+/* END OF FILE: vc-styles.css */

@@ -1,4 +1,6 @@
-<!-- index.html – Winston Terminal v1: page skeleton. app.js fills the content. -->
+<!-- index.html – Winston Terminal v4: page skeleton. app.js fills the content; vc-app.js fills Value Chain; methodology.js fills Methodology.
+     v3 (polish foundation): polish.css, header data-quality chips, dashboard loading skeleton, watermark, deferred scripts.
+     v4: Supply Chain tab (vc-splc.js/.css); Phase 2 command line, palette, shortcut sheet and tour (cmd.js/.css); plan-v3 coming-soon modules. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,10 +10,15 @@
   <!-- ===== SECTION: FONTS + STYLES ===== -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="vc-styles.css">
+  <link rel="stylesheet" href="polish.css">
+  <link rel="stylesheet" href="vc-splc.css">
+  <link rel="stylesheet" href="cmd.css">
 </head>
-<body>
+<body class="is-loading">
   <!-- ===== SECTION: SIDEBAR ===== -->
   <aside class="sidebar" id="sidebar">
     <div class="side-brand">
@@ -24,11 +31,14 @@
       <a href="#transactions" data-page="transactions">Transactions</a>
       <a href="#import" data-page="import">Import / Export</a>
       <a href="#settings" data-page="settings">Rules &amp; Settings</a>
+      <a href="#valuechain" data-page="valuechain">Value Chain</a>
       <div class="nav-label">Coming soon</div>
-      <a href="#soon-analyst" data-page="soon-analyst" class="soon">Analyst</a>
-      <a href="#soon-radar" data-page="soon-radar" class="soon">Opportunity Radar</a>
-      <a href="#soon-thesis" data-page="soon-thesis" class="soon">Thesis Tracker</a>
+      <a href="#soon-idea" data-page="soon-idea" class="soon">Idea Lab</a>
+      <a href="#soon-macro" data-page="soon-macro" class="soon">HK Macro &amp; Peg</a>
       <a href="#soon-brief" data-page="soon-brief" class="soon">Morning Brief</a>
+      <a href="#soon-events" data-page="soon-events" class="soon">Event Tracker</a>
+      <div class="nav-label">About</div>
+      <a href="#methodology" data-page="methodology">Methodology</a>
     </nav>
   </aside>
 
@@ -39,11 +49,40 @@
       <span class="clock mono" id="clock" title="Hong Kong time">--:--:-- HKT</span>
       <span id="mode-badge"></span>
       <span class="fx-chip mono" id="fx-chip"></span>
-      <a class="checks-chip mono" id="checks-chip" href="#dashboard" data-action="goto-checks">Checks –/7</a>
+      <span class="dq" id="dq" title="Data quality">
+        <a class="checks-chip mono" id="checks-chip" href="#dashboard" data-action="goto-checks">Checks –/7</a>
+        <a class="dq-chip mono" id="vc-chip" href="#valuechain" hidden></a>
+        <span class="dq-chip mono" id="fresh-chip"></span>
+      </span>
+      <!-- v4 Phase 2: command line row (cmd.js wires it; Ctrl/Cmd+K palette, ? sheet, guided tour) -->
+      <div class="cmdbar" id="cmdbar">
+        <div class="cmd" id="cmd">
+          <label class="cmd-prompt mono" for="cmd-input">&gt;</label>
+          <input id="cmd-input" class="cmd-input mono" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" enterkeyhint="go"
+            placeholder="Type a command: 0700 DES · NVDA VC · SHOCK CAPEX · HELP" aria-label="Command line" role="combobox" aria-autocomplete="list" aria-controls="cmd-list" aria-expanded="false">
+          <kbd class="cmd-kbd" title="Press / to focus">/</kbd>
+          <ul class="cmd-list" id="cmd-list" role="listbox" aria-label="Suggestions" hidden></ul>
+        </div>
+        <span class="cmd-pins" id="cmd-pins" aria-label="Pinned commands"></span>
+        <button class="btn cmd-btn mono" type="button" data-cmd-ui="palette" title="Command palette (Ctrl+K / ⌘K)" aria-label="Open command palette">⌘K</button>
+        <button class="btn cmd-btn mono" type="button" data-cmd-ui="help" title="Keyboard shortcuts and commands (?)" aria-label="Shortcuts and commands">?</button>
+        <button class="btn primary tour-btn" type="button" id="tour-btn" data-cmd-ui="tour">▶ 60-second tour</button>
+      </div>
     </header>
 
     <!-- ===== SECTION: STATUS BANNER ===== -->
-    <div id="banner"></div>
+    <div id="banner" aria-live="polite"></div>
+
+    <!-- ===== SECTION: LOADING SKELETON (shown while body has class "is-loading"; app.js removes both on first render, so nothing shifts) ===== -->
+    <div class="load-skel" id="load-skel" aria-busy="true" aria-label="Loading">
+      <div class="grid">
+        <div class="panel s3 skel-card"><div class="skel skel-line w40"></div><div class="skel skel-big"></div><div class="skel skel-line w70"></div></div>
+        <div class="panel s3 skel-card"><div class="skel skel-line w40"></div><div class="skel skel-big"></div><div class="skel skel-line w70"></div></div>
+        <div class="panel s3 skel-card"><div class="skel skel-line w40"></div><div class="skel skel-big"></div><div class="skel skel-line w70"></div></div>
+        <div class="panel s3 skel-card"><div class="skel skel-line w40"></div><div class="skel skel-big"></div><div class="skel skel-line w70"></div></div>
+      </div>
+      <div class="panel skel-card"><div class="skel skel-line w30"></div><div class="skel skel-row"></div><div class="skel skel-row"></div><div class="skel skel-row"></div><div class="skel skel-row"></div><div class="skel skel-row"></div></div>
+    </div>
 
     <!-- ===== SECTION: PAGES (filled by app.js) ===== -->
     <main class="content">
@@ -52,6 +91,8 @@
       <section class="page" id="page-transactions"></section>
       <section class="page" id="page-import"></section>
       <section class="page" id="page-settings"></section>
+      <section class="page" id="page-valuechain"></section>
+      <section class="page" id="page-methodology"></section>
       <section class="page" id="page-soon"></section>
     </main>
 
@@ -64,23 +105,30 @@
   <div class="analyst-panel" id="analyst-panel" hidden>
     <div class="panel-head"><span class="panel-title">Analyst</span><span class="badge soon-badge">Coming soon</span>
       <button class="icon-btn" data-action="toggle-analyst" aria-label="Close">×</button></div>
-    <p>In Step 3 a Grok analyst will explain the numbers on this screen. It will only use figures calc.js has already calculated and will never invent one.</p>
+    <p>In a later phase a Grok analyst will explain the numbers on this screen. It will only use figures calc.js has already calculated and will never invent one.</p>
   </div>
   <div class="modal-overlay" id="modal" hidden>
     <div class="modal" role="dialog" aria-modal="true">
-      <div class="panel-head"><span class="panel-title" id="modal-title">Detail</span>
+      <div class="panel-head"><span class="panel-title" id="modal-title">Detail</span><span class="modal-src" id="modal-src"></span>
         <button class="icon-btn" data-action="close-modal" aria-label="Close">×</button></div>
       <div id="modal-body"></div>
     </div>
   </div>
   <div class="toast" id="toast" hidden></div>
+  <div class="watermark" id="watermark" aria-hidden="true">DEMO PORTFOLIO · ILLUSTRATIVE PRICES</div>
   <noscript><p class="noscript">Winston Terminal needs JavaScript switched on.</p></noscript>
 
-  <!-- ===== SECTION: SCRIPTS (order matters: Chart.js, data, calc, app) ===== -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-  <script src="data.js"></script>
-  <script src="calc.js"></script>
-  <script src="app.js"></script>
+  <!-- ===== SECTION: SCRIPTS (Chart.js 4.4.4 loads async – app.js draws charts when it arrives; the rest deferred in order: data, vc-data, calc, vc-calc, vc-splc, vc-app, methodology, app, cmd) ===== -->
+  <script async id="chartjs-cdn" src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" onload="window.WT_CHART_STATE='ready'" onerror="window.WT_CHART_STATE='failed'"></script>
+  <script defer src="data.js"></script>
+  <script defer src="vc-data.js"></script>
+  <script defer src="calc.js"></script>
+  <script defer src="vc-calc.js"></script>
+  <script defer src="vc-splc.js"></script>
+  <script defer src="vc-app.js"></script>
+  <script defer src="methodology.js"></script>
+  <script defer src="app.js"></script>
+  <script defer src="cmd.js"></script>
 </body>
 </html>
 <!-- END OF FILE: index.html -->

@@ -1,0 +1,112 @@
+/* polish.css – Winston Terminal v3 (polish foundation): design tokens, HUD panel frame, number typography,
+   colour contract, motion (count-up flash, skeleton) with reduced-motion support, states, watermark, methodology page.
+   Loaded after styles.css and vc-styles.css; overrides only. No scanlines, no glow except focus. */
+
+/* ===== SECTION: DESIGN TOKENS ===== */
+:root {
+  /* spacing / radius / type scale */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px;
+  --radius: 4px; --radius-chip: 10px;
+  --fs-xs: 10px; --fs-s: 11px; --fs-m: 13px; --fs-l: 15px; --fs-kpi: 24px;
+  /* motion */
+  --dur-fast: 150ms; --dur-count: 400ms; --dur-flash: 600ms;
+  /* colour contract: green/red = up/down only; amber = focus + WATCH; red chip = FLAG; teal = neutral metric */
+  --up: var(--green); --down: var(--red); --focus: var(--amber); --watch: var(--amber); --flag: var(--red); --neutral: var(--teal);
+  --up-tint: rgba(0,193,118,.22); --down-tint: rgba(255,77,79,.22); --amber-tint: rgba(255,176,0,.12); --teal-tint: rgba(46,196,182,.12);
+  --skel-a: #151B22; --skel-b: #1D2530;
+}
+
+/* ===== SECTION: HUD PANEL FRAME (title · source chip · as-of; amber corner brackets on the focused panel only) ===== */
+.panel { position: relative; }
+.panel-head { flex-wrap: wrap; row-gap: var(--sp-1); }
+.src-chip { font: 500 var(--fs-xs)/1.5 var(--mono); color: var(--neutral); background: var(--teal-tint); border-radius: 2px; padding: 0 5px; white-space: nowrap; }
+.asof { font: var(--fs-xs)/1.5 var(--mono); color: var(--muted); white-space: nowrap; }
+.modal-src { display: inline-flex; gap: 8px; align-items: center; } .modal .icon-btn, .vc-drawer .icon-btn { margin-left: auto; }
+.panel.is-focused { border-color: #2A3340; }
+.panel.is-focused::after {
+  content: ""; position: absolute; inset: -1px; pointer-events: none; border-radius: var(--radius);
+  background:
+    linear-gradient(var(--focus), var(--focus)) top left / 10px 1px no-repeat,
+    linear-gradient(var(--focus), var(--focus)) top left / 1px 10px no-repeat,
+    linear-gradient(var(--focus), var(--focus)) top right / 10px 1px no-repeat,
+    linear-gradient(var(--focus), var(--focus)) top right / 1px 10px no-repeat,
+    linear-gradient(var(--focus), var(--focus)) bottom left / 10px 1px no-repeat,
+    linear-gradient(var(--focus), var(--focus)) bottom left / 1px 10px no-repeat,
+    linear-gradient(var(--focus), var(--focus)) bottom right / 10px 1px no-repeat,
+    linear-gradient(var(--focus), var(--focus)) bottom right / 1px 10px no-repeat;
+}
+
+/* ===== SECTION: NUMBERS (tabular, right-aligned mono, arrow beside colour) ===== */
+.big, .vc-big, td, .mono, .kv span, .legend .v, .checks-chip, .dq-chip { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
+.kpi .big { font-family: var(--mono); }
+.pos::before { content: "▲ "; font-size: .8em; }
+.neg::before { content: "▼ "; font-size: .8em; }
+.noarrow::before, .zero::before { content: none; }
+
+/* ===== SECTION: COLOUR CONTRACT (WATCH and amber states use amber; FLAG keeps the red chip) ===== */
+.b-watch { color: var(--watch); background: var(--amber-tint); }
+.banner.watch { background: var(--amber-tint); }
+.vc-illus { background: transparent; color: var(--amber); border: 1px solid rgba(255,176,0,.55); }
+
+/* ===== SECTION: HEADER DATA-QUALITY GROUP (Checks 7/7 · VC 8/8 · Fresh) ===== */
+.dq { margin-left: auto; display: inline-flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.dq .checks-chip { margin-left: 0; }
+.dq-chip { font-size: 12px; padding: 2px 8px; border-radius: var(--radius-chip); color: var(--muted); background: var(--hover); white-space: nowrap; }
+.dq-chip:empty { display: none; }
+a.dq-chip:hover { text-decoration: none; filter: brightness(1.15); }
+.dq-chip.ok { color: var(--green); background: rgba(0,193,118,.15); }
+.dq-chip.bad { color: #fff; background: var(--red); }
+.dq-chip.warn { color: var(--amber); background: var(--amber-tint); }
+.dq-chip.demo { color: var(--neutral); background: var(--teal-tint); }
+
+/* ===== SECTION: FOCUS (glow only on focus) ===== */
+input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 2px rgba(255,176,0,.18); }
+.btn:focus-visible, .vc-tab:focus-visible, .chip:focus-visible { box-shadow: 0 0 0 2px rgba(255,176,0,.25); }
+
+/* ===== SECTION: MOTION (change flash, skeleton shimmer) ===== */
+@keyframes wtFlashUp { from { background-color: var(--up-tint); } to { background-color: transparent; } }
+@keyframes wtFlashDown { from { background-color: var(--down-tint); } to { background-color: transparent; } }
+@keyframes wtShimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+.flash-up { animation: wtFlashUp var(--dur-flash) ease-out; border-radius: 2px; }
+.flash-down { animation: wtFlashDown var(--dur-flash) ease-out; border-radius: 2px; }
+.skel { background: linear-gradient(90deg, var(--skel-a) 25%, var(--skel-b) 50%, var(--skel-a) 75%); background-size: 200% 100%;
+  animation: wtShimmer 1.2s linear 8; border-radius: 3px; }
+.skel-line { height: 10px; margin: 6px 0; } .skel-big { height: 26px; width: 65%; margin: 10px 0; } .skel-row { height: 18px; margin: 8px 0; }
+.load-skel { padding: var(--sp-2); }
+.is-loading .content, .is-loading .footer { display: none; } /* pages appear in one step after the first render: no layout shift (CLS) */
+.chart-skel { width: 100%; height: 100%; min-height: 100px; animation-iteration-count: infinite; }
+.w30 { width: 30%; } .w40 { width: 40%; } .w60 { width: 60%; } .w70 { width: 70%; }
+@media (prefers-reduced-motion: reduce) {
+  .flash-up, .flash-down, .skel { animation: none !important; }
+  * { scroll-behavior: auto !important; }
+}
+
+/* ===== SECTION: STATES (empty, error, cache) ===== */
+.state { color: var(--muted); font-size: var(--fs-s); border: 1px dashed var(--border); border-radius: var(--radius); padding: var(--sp-3); text-align: center; }
+.state.error { color: var(--amber); border-color: rgba(255,176,0,.45); background: var(--amber-tint); }
+.state.cache { color: var(--muted); border-style: solid; } /* e.g. "Feed down – showing cache 16:08 HKT" (used from the live-data phase) */
+.chart-fallback.state { height: auto; min-height: 120px; }
+
+/* ===== SECTION: WATERMARK + FOOTER ===== */
+.watermark { position: fixed; left: 12px; bottom: 12px; width: 186px; z-index: 25; pointer-events: none; user-select: none; text-align: center;
+  font: 600 10px/1.5 var(--mono); letter-spacing: .14em; color: rgba(255,176,0,.6); border: 1px solid rgba(255,176,0,.25); padding: 5px 6px; border-radius: 2px; background: var(--panel); }
+.foot-meta { margin-left: 8px; white-space: nowrap; }
+.footer a { text-decoration: underline; text-underline-offset: 2px; }
+
+/* ===== SECTION: METHODOLOGY PAGE ===== */
+.meth-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+.meth-sec ul { margin: 0; padding-left: 18px; } .meth-sec li { margin: 3px 0; line-height: 1.5; }
+.meth-sec p { margin: 0 0 6px; }
+.meth-sec code { color: var(--neutral); font-size: 12px; }
+.meth-table { width: 100%; margin: 4px 0 8px; } .meth-table td { white-space: normal; text-align: left; font-family: var(--ui); height: auto; padding: 4px 5px; vertical-align: top; }
+.meth-table th { text-align: left; position: static; }
+
+/* ===== SECTION: PHONE (below 900px) ===== */
+@media (max-width: 900px) {
+  .dq { margin-left: 0; }
+  .watermark { width: auto; left: 8px; bottom: 8px; font-size: 9px; letter-spacing: .1em; padding: 3px 6px; background: rgba(17,22,28,.9); }
+  .foot-meta { display: block; margin: 4px 0 0; white-space: normal; }
+  .panel-head .panel-actions { margin-left: 0; }
+}
+
+/* END OF FILE: polish.css */
