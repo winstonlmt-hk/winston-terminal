@@ -1,0 +1,42 @@
+{
+ "id": "hkma_liquidity",
+ "fetched_at": "2026-10-05T06:42:19.278Z",
+ "data": {
+  "latest": {
+   "date": "2026-10-02",
+   "agg_balance": 54108,
+   "opening_balance": 54108,
+   "hibor_on": 2.63,
+   "hibor_1m": 2.96839,
+   "cu_strong": 7.75,
+   "cu_weak": 7.85,
+   "base_rate": 4.25,
+   "twi": 100.6,
+   "efbn_outstanding": null
+  },
+  "series": [
+   {
+    "date": "2026-10-02",
+    "agg_balance": 54108,
+    "opening_balance": 54108,
+    "hibor_on": 2.63,
+    "hibor_1m": 2.96839,
+    "cu_strong": 7.75,
+    "cu_weak": 7.85,
+    "base_rate": 4.25,
+    "twi": 100.6,
+    "efbn_outstanding": null
+   }
+  ],
+  "unit_agg_balance": "HKD million",
+  "unit_rates": "% p.a."
+ },
+ "as_of": "2026-10-02",
+ "last_ok_at": "2026-10-05T06:10:00.000Z",
+ "url": "https://api.hkma.gov.hk/public/market-data-and-statistics/daily-monetary-statistics/daily-figures-interbank-liquidity",
+ "status": "error",
+ "error": "HTTP 405 – HTML error page (gateway firewall block, usually temporary)",
+ "http": 405,
+ "attempted_url": "https://api.hkma.gov.hk/public/market-data-and-statistics/daily-monetary-statistics/daily-figures-interbank-liquidity?pagesize=40",
+ "seed_note": "Captured from api.hkma.gov.hk at 14:10 HKT on 5 Oct 2026 (latest record only); later box fetches were blocked by the HKMA gateway firewall (HTTP 405). Next GitHub Actions run replaces this."
+}

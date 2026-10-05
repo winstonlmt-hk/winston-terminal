@@ -1,0 +1,53 @@
+{
+ "id": "rss_sec",
+ "fetched_at": "2026-10-05T06:23:18.170Z",
+ "last_ok_at": "2026-10-05T06:23:18.170Z",
+ "status": "ok",
+ "url": "https://www.sec.gov/news/pressreleases.rss",
+ "as_of": "2026-10-01",
+ "data": {
+  "items": [
+   {
+    "title": "SEC Proposal Would Address How Investment Advisers and Funds Can Custody Crypto Assets Under the Federal Securities Laws",
+    "url": "https://www.sec.gov/newsroom/press-releases/2026-100-sec-proposal-would-address-how-investment-advisers-funds-can-custody-crypto-assets-under-federal",
+    "time": "2026-10-01T16:16:07.000Z"
+   },
+   {
+    "title": "SEC’s Division of Examinations Announces New Exam Handbook",
+    "url": "https://www.sec.gov/newsroom/press-releases/2026-99-secs-division-examinations-announces-new-exam-handbook",
+    "time": "2026-10-01T15:03:35.000Z"
+   },
+   {
+    "title": "SEC Charges Meyer Global Management and Its CEO With Defrauding Retail Investors in Private Funds That Held Interests in SpaceX and Other Pre-IPO Securities",
+    "url": "https://www.sec.gov/newsroom/press-releases/2026-98-sec-charges-meyer-global-management-its-ceo-defrauding-retail-investors-private-funds-held-interests",
+    "time": "2026-09-30T18:30:01.000Z"
+   },
+   {
+    "title": "SEC Charges Two Individuals With Orchestrating Fraud Scheme That Targeted Veterans",
+    "url": "https://www.sec.gov/newsroom/press-releases/2026-97-sec-charges-two-individuals-orchestrating-fraud-scheme-targeted-veterans",
+    "time": "2026-09-30T16:42:15.000Z"
+   },
+   {
+    "title": "SEC Proposes Amendments to Expand Responsible Retailization of Private Markets",
+    "url": "https://www.sec.gov/newsroom/press-releases/2026-96-sec-proposes-amendments-expand-responsible-retailization-private-markets",
+    "time": "2026-09-30T15:45:00.000Z"
+   },
+   {
+    "title": "SEC Charges Multiple Entities in Fraud Schemes Totaling at Least $15 Million That Used WhatsApp and Other Platforms to Lure Investors",
+    "url": "https://www.sec.gov/newsroom/press-releases/2026-95-sec-charges-multiple-entities-fraud-schemes-totaling-least-15-million-used-whatsapp-other-platforms",
+    "time": "2026-09-29T13:55:53.000Z"
+   },
+   {
+    "title": "SEC Charges Registered Investment Adviser Zoe Financial for Failure to Disclose Conflict of Interest",
+    "url": "https://www.sec.gov/newsroom/press-releases/2026-94-sec-charges-registered-investment-adviser-zoe-financial-failure-disclose-conflict-interest",
+    "time": "2026-09-28T17:46:30.000Z"
+   },
+   {
+    "title": "SEC Publishes Updated Market Statistics, Highlighting Increase in IPOs and Proceeds Raised",
+    "url": "https://www.sec.gov/newsroom/press-releases/2026-93-sec-publishes-updated-market-statistics-highlighting-increase-ipos-proceeds-raised",
+    "time": "2026-09-23T18:27:00.000Z"
+   }
+  ]
+ },
+ "ms": 29
+}

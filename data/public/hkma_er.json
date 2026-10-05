@@ -1,0 +1,27 @@
+{
+ "id": "hkma_er",
+ "fetched_at": "2026-10-05T06:42:19.278Z",
+ "data": {
+  "latest": {
+   "date": "2026-08-31",
+   "usd_hkd": 7.839,
+   "eeri": null
+  },
+  "series": [
+   {
+    "date": "2026-08-31",
+    "usd_hkd": 7.839,
+    "eeri": null
+   }
+  ],
+  "note": "HKD per USD, published in the HKMA Monthly Statistical Bulletin (lags about one month)"
+ },
+ "as_of": "2026-08-31",
+ "last_ok_at": "2026-10-05T06:10:00.000Z",
+ "url": "https://api.hkma.gov.hk/public/market-data-and-statistics/monthly-statistical-bulletin/er-ir/er-eeri-daily",
+ "status": "error",
+ "error": "HTTP 405 – HTML error page (gateway firewall block, usually temporary)",
+ "http": 405,
+ "attempted_url": "https://api.hkma.gov.hk/public/market-data-and-statistics/monthly-statistical-bulletin/er-ir/er-eeri-daily?pagesize=40",
+ "seed_note": "Captured from api.hkma.gov.hk at 14:10 HKT on 5 Oct 2026 (latest record only); later box fetches were blocked by the HKMA gateway firewall (HTTP 405). Next GitHub Actions run replaces this."
+}

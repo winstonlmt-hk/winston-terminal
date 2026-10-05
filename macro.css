@@ -1,0 +1,96 @@
+/* macro.css – Winston Terminal v5 (Phase 3): HK Macro & Peg page, Data Sources page, freshness badges, evidence inspector, Demo/Live pill.
+   Restraint: no animation beyond what polish.css allows; colours from the existing tokens. */
+
+/* ===== SECTION: PAGE TOP + GAPS CHIP ===== */
+.macro-top { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-bottom: 12px; }
+.macro-meta { color: var(--muted); font-size: 11px; margin-left: auto; }
+.gap-chip { font: 500 11px/1.6 var(--mono); padding: 1px 8px; border-radius: 2px; white-space: nowrap; }
+.gap-chip.has-gaps { color: var(--amber); background: rgba(255,176,0,.12); }
+.gap-chip.no-gaps { color: var(--green); background: rgba(0,193,118,.12); }
+.gap-chip:hover { text-decoration: none; filter: brightness(1.15); }
+
+/* ===== SECTION: FRESHNESS BADGES + TIERS ===== */
+.fresh-badge { font: 600 10px/1.6 var(--mono); letter-spacing: .04em; padding: 0 5px; border-radius: 2px; margin-left: 4px; white-space: nowrap; }
+.fs-fresh { color: var(--green); background: rgba(0,193,118,.14); }
+.fs-stale { color: var(--amber); background: rgba(255,176,0,.14); }
+.fs-very_stale { color: #fff; background: rgba(255,77,79,.55); }
+.fs-no_data, .fs-disabled { color: var(--muted); background: var(--hover); }
+.fs-error { color: #fff; background: var(--red); }
+.fs-failing { outline: 1px dashed rgba(255,77,79,.7); }
+.tier { font: 600 10px/1.5 var(--mono); padding: 0 4px; border-radius: 2px; background: var(--hover); color: var(--muted); }
+.tier.t1 { color: var(--green); } .tier.t2 { color: var(--blue); } .tier.t3 { color: var(--amber); } .tier.t4 { color: #F472B6; }
+.tier.sa { color: var(--yellow); border: 1px solid rgba(255,197,61,.4); }
+.src-link:hover { text-decoration: none; filter: brightness(1.2); }
+
+/* ===== SECTION: KPI CELLS + EVIDENCE LINKS ===== */
+.peg-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 10px; }
+.mk .mk-v { font-size: 20px; font-weight: 500; line-height: 1.25; }
+.mk .sub { color: var(--muted); font-size: 11px; }
+a.ev-link { color: inherit; border-bottom: 1px dotted rgba(46,196,182,.6); cursor: pointer; }
+a.ev-link:hover { text-decoration: none; color: var(--teal); }
+.mk-v.amber a.ev-link { color: var(--amber); }
+.mk-v.pos a.ev-link { color: var(--green); } .mk-v.neg a.ev-link { color: var(--red); }
+
+/* ===== SECTION: PEG BAND GAUGE ===== */
+.peg-band { position: relative; height: 46px; margin: 18px 4px 6px; border-bottom: 1px solid var(--border); background: linear-gradient(90deg, transparent, transparent); }
+.peg-zone { position: absolute; top: 14px; height: 12px; background: rgba(46,196,182,.14); border: 1px solid rgba(46,196,182,.45); border-radius: 2px; }
+.peg-tick { position: absolute; top: 30px; transform: translateX(-50%); font: 10px/1.2 var(--mono); color: var(--muted); white-space: nowrap; }
+.peg-tick b { color: var(--text); font-weight: 500; }
+.peg-tick::before { content: ""; position: absolute; left: 50%; top: -18px; height: 16px; border-left: 1px solid var(--border); }
+.peg-tick.mid b { color: var(--muted); }
+.peg-mark { position: absolute; top: 9px; width: 4px; height: 22px; margin-left: -2px; border-radius: 1px; background: var(--muted); }
+.peg-mark.best { width: 6px; margin-left: -3px; box-shadow: 0 0 0 1px var(--bg); }
+.m0 { background: var(--amber) !important; } .m1 { background: var(--blue) !important; } .m2 { background: #A78BFA !important; }
+.peg-legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 11px; margin: 14px 0 6px; }
+.peg-dot { display: inline-block; width: 8px; height: 8px; border-radius: 1px; margin-right: 5px; vertical-align: 0; }
+.peg-spark { display: flex; align-items: center; gap: 10px; margin: 6px 0; }
+.spark polyline { fill: none; stroke: var(--teal); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+.spark .sp-zero { stroke: var(--border); stroke-dasharray: 3 3; }
+.curve-svg polyline { stroke: var(--amber); stroke-width: 2; }
+.curve { margin: 4px 0 8px; } .curve svg { width: 100%; max-width: 520px; height: 70px; }
+.curve-t td, .curve-t th { padding: 3px 6px; font-size: 11px; }
+
+/* ===== SECTION: HEADLINES + LISTS ===== */
+.hl-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.hl-head { display: flex; align-items: center; gap: 4px; margin-bottom: 4px; font-size: 12px; }
+.hl { list-style: none; margin: 0; padding: 0; }
+.hl li { padding: 4px 0; border-bottom: 1px solid #151B22; font-size: 12px; line-height: 1.35; }
+.hl li:last-child { border-bottom: none; }
+.hl-t { color: var(--muted); font-size: 10px; margin-right: 6px; }
+.hl-src { color: var(--amber); font-size: 10px; margin-right: 6px; font-family: var(--mono); }
+.theme-t td, .theme-t th { padding: 3px 6px; vertical-align: middle; }
+
+/* ===== SECTION: DATA SOURCES TABLE ===== */
+.src-t td { vertical-align: top; font-size: 12px; }
+.src-t .note { font-size: 11px; }
+.src-t .attr { color: var(--text); font-size: 11px; margin-top: 2px; }
+
+/* ===== SECTION: EVIDENCE INSPECTOR ===== */
+.ev-t { width: 100%; border-collapse: collapse; }
+.ev-t th { width: 110px; color: var(--muted); font-weight: 500; vertical-align: top; padding: 4px 8px 4px 0; }
+.ev-t td { padding: 4px 0; font-family: var(--ui); }
+.ev-url { word-break: break-all; font-size: 11px; }
+.ev-raw pre { max-height: 180px; overflow: auto; background: var(--bg); padding: 6px; font-size: 11px; border: 1px solid var(--border); }
+
+/* ===== SECTION: DEMO / LIVE PILL + LIVE STATES ===== */
+.live-pill { font-size: 11px; padding: 2px 8px; border-radius: 10px; border: 1px solid var(--border); background: var(--hover); color: var(--muted); cursor: pointer; white-space: nowrap; }
+.live-pill:hover { filter: brightness(1.2); }
+.live-pill.on { color: #000; background: var(--green); border-color: var(--green); font-weight: 700; }
+.live-pill.off { color: var(--teal); }
+.watermark.live { color: var(--green); border-color: rgba(0,193,118,.5); }
+.live-form { grid-template-columns: 1fr; }
+.live-hash { margin-top: 10px; font-size: 12px; }
+.hash-out { word-break: break-all; color: var(--amber); font-size: 11px; min-height: 1em; }
+.foot-attr { display: block; color: var(--muted); font-size: 11px; margin-top: 2px; }
+
+/* ===== SECTION: RESPONSIVE ===== */
+@media (max-width: 1400px) { .hl-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 900px) {
+  .hl-grid { grid-template-columns: 1fr; }
+  .macro-meta { margin-left: 0; }
+  .peg-tick { font-size: 9px; }
+  .peg-tick:not(.mid) { max-width: 70px; white-space: normal; text-align: center; }
+  .src-t { min-width: 820px; }
+}
+
+/* END OF FILE: macro.css */

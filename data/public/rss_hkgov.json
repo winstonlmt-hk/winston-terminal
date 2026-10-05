@@ -1,0 +1,53 @@
+{
+ "id": "rss_hkgov",
+ "fetched_at": "2026-10-05T06:23:18.199Z",
+ "last_ok_at": "2026-10-05T06:23:18.199Z",
+ "status": "ok",
+ "url": "https://www.info.gov.hk/gia/rss/general_en.xml",
+ "as_of": "2026-10-05",
+ "data": {
+  "items": [
+   {
+    "title": "LegCo to joint debate on Hong Kong's First Five-Year Plan and Policy Address",
+    "url": "https://www.info.gov.hk/gia/general/202610/05/P2026100500392.htm",
+    "time": "2026-10-05T06:14:08.000Z"
+   },
+   {
+    "title": "Violinist Patricia Kopatchinskaja and cellist Sol Gabetta to make their duo debut in Hong Kong in November (with photos)",
+    "url": "https://www.info.gov.hk/gia/general/202610/05/P2026100500311.htm",
+    "time": "2026-10-05T04:47:00.000Z"
+   },
+   {
+    "title": "Hong Kong Customs seizes suspected cannabis buds at airport (with photo)",
+    "url": "https://www.info.gov.hk/gia/general/202610/05/P2026100500343.htm",
+    "time": "2026-10-05T04:25:00.000Z"
+   },
+   {
+    "title": "Opening keynote address by DSJ at Global Youth Powerhouse Summit 2026 (English only) (with photo)",
+    "url": "https://www.info.gov.hk/gia/general/202610/05/P2026100500310.htm",
+    "time": "2026-10-05T04:03:00.000Z"
+   },
+   {
+    "title": "Funding Scheme on the Promotion of Family Education 2026-27 opens for application from today",
+    "url": "https://www.info.gov.hk/gia/general/202610/05/P2026100500254.htm",
+    "time": "2026-10-05T04:00:00.000Z"
+   },
+   {
+    "title": "Hong Kong Customs seizes injection vials with suspected controlled substances worth about $100,000 (with photo)",
+    "url": "https://www.info.gov.hk/gia/general/202610/05/P2026100500318.htm",
+    "time": "2026-10-05T03:58:00.000Z"
+   },
+   {
+    "title": "Temporary suspension of LCSD's Mobile Library 2, 6 and 12 services",
+    "url": "https://www.info.gov.hk/gia/general/202610/05/P2026100500195.htm",
+    "time": "2026-10-05T03:00:00.000Z"
+   },
+   {
+    "title": "AFCD urges grave sweepers to prevent hill fires",
+    "url": "https://www.info.gov.hk/gia/general/202610/05/P2026100200661.htm",
+    "time": "2026-10-05T03:00:00.000Z"
+   }
+  ]
+ },
+ "ms": 1003
+}

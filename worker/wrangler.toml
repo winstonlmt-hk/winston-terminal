@@ -1,0 +1,14 @@
+# worker/wrangler.toml – Winston Terminal v5 (Phase 3): Cloudflare Worker config for the owner-only Live mode.
+# Deploy (optional – the dashboard paste route needs no tools):  cd worker  &&  npx wrangler deploy
+# Secrets are NEVER written here. Set them in the dashboard (Settings → Variables and Secrets) or with:
+#   npx wrangler secret put EODHD_KEY      npx wrangler secret put FINNHUB_KEY      npx wrangler secret put PASSPHRASE_HASH
+name = "winston-terminal-live"
+main = "worker.js"
+compatibility_date = "2026-09-01"
+workers_dev = true
+
+[vars]
+# Who may call the Worker from a browser. "null" is the origin a page opened from file:// sends.
+ALLOWED_ORIGINS = "https://winstonlmt-hk.github.io,null"
+
+# END OF FILE: worker/wrangler.toml

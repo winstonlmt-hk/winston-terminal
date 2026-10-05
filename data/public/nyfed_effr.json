@@ -1,0 +1,293 @@
+{
+ "id": "nyfed_effr",
+ "fetched_at": "2026-10-05T06:21:10.322Z",
+ "last_ok_at": "2026-10-05T06:21:10.322Z",
+ "status": "ok",
+ "url": "https://markets.newyorkfed.org/api/rates/unsecured/effr/last/30.json",
+ "as_of": "2026-10-01",
+ "data": {
+  "latest": {
+   "date": "2026-10-01",
+   "rate": 3.88,
+   "p1": 3.85,
+   "p99": 3.89,
+   "volume_bn": 120,
+   "target_from": 3.75,
+   "target_to": 4
+  },
+  "series": [
+   {
+    "date": "2026-10-01",
+    "rate": 3.88,
+    "p1": 3.85,
+    "p99": 3.89,
+    "volume_bn": 120,
+    "target_from": 3.75,
+    "target_to": 4
+   },
+   {
+    "date": "2026-09-30",
+    "rate": 3.88,
+    "p1": 3.86,
+    "p99": 3.92,
+    "volume_bn": 83,
+    "target_from": 3.75,
+    "target_to": 4
+   },
+   {
+    "date": "2026-09-29",
+    "rate": 3.88,
+    "p1": 3.86,
+    "p99": 3.9,
+    "volume_bn": 111,
+    "target_from": 3.75,
+    "target_to": 4
+   },
+   {
+    "date": "2026-09-28",
+    "rate": 3.88,
+    "p1": 3.85,
+    "p99": 3.9,
+    "volume_bn": 110,
+    "target_from": 3.75,
+    "target_to": 4
+   },
+   {
+    "date": "2026-09-25",
+    "rate": 3.88,
+    "p1": 3.85,
+    "p99": 3.9,
+    "volume_bn": 112,
+    "target_from": 3.75,
+    "target_to": 4
+   },
+   {
+    "date": "2026-09-24",
+    "rate": 3.88,
+    "p1": 3.85,
+    "p99": 3.94,
+    "volume_bn": 105,
+    "target_from": 3.75,
+    "target_to": 4
+   },
+   {
+    "date": "2026-09-23",
+    "rate": 3.88,
+    "p1": 3.86,
+    "p99": 3.93,
+    "volume_bn": 101,
+    "target_from": 3.75,
+    "target_to": 4
+   },
+   {
+    "date": "2026-09-22",
+    "rate": 3.88,
+    "p1": 3.85,
+    "p99": 3.94,
+    "volume_bn": 103,
+    "target_from": 3.75,
+    "target_to": 4
+   },
+   {
+    "date": "2026-09-21",
+    "rate": 3.88,
+    "p1": 3.85,
+    "p99": 3.9,
+    "volume_bn": 95,
+    "target_from": 3.75,
+    "target_to": 4
+   },
+   {
+    "date": "2026-09-18",
+    "rate": 3.88,
+    "p1": 3.85,
+    "p99": 3.9,
+    "volume_bn": 96,
+    "target_from": 3.75,
+    "target_to": 4
+   },
+   {
+    "date": "2026-09-17",
+    "rate": 3.88,
+    "p1": 3.85,
+    "p99": 3.89,
+    "volume_bn": 100,
+    "target_from": 3.75,
+    "target_to": 4
+   },
+   {
+    "date": "2026-09-16",
+    "rate": 3.63,
+    "p1": 3.6,
+    "p99": 3.65,
+    "volume_bn": 90,
+    "target_from": 3.5,
+    "target_to": 3.75
+   },
+   {
+    "date": "2026-09-15",
+    "rate": 3.63,
+    "p1": 3.6,
+    "p99": 3.64,
+    "volume_bn": 100,
+    "target_from": 3.5,
+    "target_to": 3.75
+   },
+   {
+    "date": "2026-09-14",
+    "rate": 3.63,
+    "p1": 3.6,
+    "p99": 3.64,
+    "volume_bn": 91,
+    "target_from": 3.5,
+    "target_to": 3.75
+   },
+   {
+    "date": "2026-09-11",
+    "rate": 3.63,
+    "p1": 3.6,
+    "p99": 3.64,
+    "volume_bn": 105,
+    "target_from": 3.5,
+    "target_to": 3.75
+   },
+   {
+    "date": "2026-09-10",
+    "rate": 3.63,
+    "p1": 3.6,
+    "p99": 3.64,
+    "volume_bn": 108,
+    "target_from": 3.5,
+    "target_to": 3.75
+   },
+   {
+    "date": "2026-09-09",
+    "rate": 3.63,
+    "p1": 3.6,
+    "p99": 3.64,
+    "volume_bn": 110,
+    "target_from": 3.5,
+    "target_to": 3.75
+   },
+   {
+    "date": "2026-09-08",
+    "rate": 3.63,
+    "p1": 3.6,
+    "p99": 3.64,
+    "volume_bn": 107,
+    "target_from": 3.5,
+    "target_to": 3.75
+   },
+   {
+    "date": "2026-09-04",
+    "rate": 3.63,
+    "p1": 3.6,
+    "p99": 3.64,
+    "volume_bn": 103,
+    "target_from": 3.5,
+    "target_to": 3.75
+   },
+   {
+    "date": "2026-09-03",
+    "rate": 3.63,
+    "p1": 3.6,
+    "p99": 3.64,
+    "volume_bn": 109,
+    "target_from": 3.5,
+    "target_to": 3.75
+   },
+   {
+    "date": "2026-09-02",
+    "rate": 3.63,
+    "p1": 3.6,
+    "p99": 3.65,
+    "volume_bn": 114,
+    "target_from": 3.5,
+    "target_to": 3.75
+   },
+   {
+    "date": "2026-09-01",
+    "rate": 3.63,
+    "p1": 3.61,
+    "p99": 3.65,
+    "volume_bn": 114,
+    "target_from": 3.5,
+    "target_to": 3.75
+   },
+   {
+    "date": "2026-08-31",
+    "rate": 3.63,
+    "p1": 3.6,
+    "p99": 3.65,
+    "volume_bn": 105,
+    "target_from": 3.5,
+    "target_to": 3.75
+   },
+   {
+    "date": "2026-08-28",
+    "rate": 3.63,
+    "p1": 3.6,
+    "p99": 3.65,
+    "volume_bn": 123,
+    "target_from": 3.5,
+    "target_to": 3.75
+   },
+   {
+    "date": "2026-08-27",
+    "rate": 3.63,
+    "p1": 3.6,
+    "p99": 3.66,
+    "volume_bn": 111,
+    "target_from": 3.5,
+    "target_to": 3.75
+   },
+   {
+    "date": "2026-08-26",
+    "rate": 3.63,
+    "p1": 3.6,
+    "p99": 3.65,
+    "volume_bn": 112,
+    "target_from": 3.5,
+    "target_to": 3.75
+   },
+   {
+    "date": "2026-08-25",
+    "rate": 3.63,
+    "p1": 3.6,
+    "p99": 3.69,
+    "volume_bn": 109,
+    "target_from": 3.5,
+    "target_to": 3.75
+   },
+   {
+    "date": "2026-08-24",
+    "rate": 3.63,
+    "p1": 3.6,
+    "p99": 3.69,
+    "volume_bn": 99,
+    "target_from": 3.5,
+    "target_to": 3.75
+   },
+   {
+    "date": "2026-08-21",
+    "rate": 3.63,
+    "p1": 3.6,
+    "p99": 3.69,
+    "volume_bn": 96,
+    "target_from": 3.5,
+    "target_to": 3.75
+   },
+   {
+    "date": "2026-08-20",
+    "rate": 3.63,
+    "p1": 3.6,
+    "p99": 3.69,
+    "volume_bn": 102,
+    "target_from": 3.5,
+    "target_to": 3.75
+   }
+  ],
+  "unit": "% p.a."
+ },
+ "ms": 108
+}

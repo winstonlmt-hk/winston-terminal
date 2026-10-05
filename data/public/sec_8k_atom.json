@@ -1,0 +1,118 @@
+{
+ "id": "sec_8k_atom",
+ "fetched_at": "2026-10-05T06:23:17.867Z",
+ "last_ok_at": "2026-10-05T06:23:17.867Z",
+ "status": "ok",
+ "url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&type=8-K&count=40&output=atom",
+ "as_of": "2026-10-02",
+ "data": {
+  "entries": [
+   {
+    "form": "8-K",
+    "company": "Outdoor Holding Co",
+    "cik": "0001015383",
+    "time": "2026-10-02T21:29:10.000Z",
+    "url": "https://www.sec.gov/Archives/edgar/data/1015383/000149315226045615/0001493152-26-045615-index.htm"
+   },
+   {
+    "form": "8-K",
+    "company": "ChronoScale Holdings Corp",
+    "cik": "0001549084",
+    "time": "2026-10-02T21:27:47.000Z",
+    "url": "https://www.sec.gov/Archives/edgar/data/1549084/000149315226045612/0001493152-26-045612-index.htm"
+   },
+   {
+    "form": "8-K",
+    "company": "RICHTECH ROBOTICS INC.",
+    "cik": "0001963685",
+    "time": "2026-10-02T21:25:13.000Z",
+    "url": "https://www.sec.gov/Archives/edgar/data/1963685/000121390026106552/0001213900-26-106552-index.htm"
+   },
+   {
+    "form": "8-K",
+    "company": "KKR Enhanced US Direct Lending Fund-L Inc.",
+    "cik": "0002012839",
+    "time": "2026-10-02T21:23:50.000Z",
+    "url": "https://www.sec.gov/Archives/edgar/data/2012839/000162828026064662/0001628280-26-064662-index.htm"
+   },
+   {
+    "form": "8-K",
+    "company": "Healthcare Triangle, Inc.",
+    "cik": "0001839285",
+    "time": "2026-10-02T21:20:16.000Z",
+    "url": "https://www.sec.gov/Archives/edgar/data/1839285/000121390026106533/0001213900-26-106533-index.htm"
+   },
+   {
+    "form": "8-K",
+    "company": "Tonix Pharmaceuticals Holding Corp.",
+    "cik": "0001430306",
+    "time": "2026-10-02T21:20:11.000Z",
+    "url": "https://www.sec.gov/Archives/edgar/data/1430306/000149315226045603/0001493152-26-045603-index.htm"
+   },
+   {
+    "form": "8-K",
+    "company": "Planet Green Holdings Corp.",
+    "cik": "0001117057",
+    "time": "2026-10-02T21:17:56.000Z",
+    "url": "https://www.sec.gov/Archives/edgar/data/1117057/000121390026106521/0001213900-26-106521-index.htm"
+   },
+   {
+    "form": "8-K",
+    "company": "GEE Group Inc.",
+    "cik": "0000040570",
+    "time": "2026-10-02T21:15:25.000Z",
+    "url": "https://www.sec.gov/Archives/edgar/data/40570/000147793226006035/0001477932-26-006035-index.htm"
+   },
+   {
+    "form": "8-K",
+    "company": "HeartSciences Inc.",
+    "cik": "0001468492",
+    "time": "2026-10-02T21:15:13.000Z",
+    "url": "https://www.sec.gov/Archives/edgar/data/1468492/000121390026106500/0001213900-26-106500-index.htm"
+   },
+   {
+    "form": "8-K",
+    "company": "SOBR Safe, Inc.",
+    "cik": "0001425627",
+    "time": "2026-10-02T21:14:11.000Z",
+    "url": "https://www.sec.gov/Archives/edgar/data/1425627/000147793226006034/0001477932-26-006034-index.htm"
+   },
+   {
+    "form": "8-K",
+    "company": "PINTEREST, INC.",
+    "cik": "0001506293",
+    "time": "2026-10-02T21:10:05.000Z",
+    "url": "https://www.sec.gov/Archives/edgar/data/1506293/000150629326000136/0001506293-26-000136-index.htm"
+   },
+   {
+    "form": "8-K",
+    "company": "Live Nation Entertainment, Inc.",
+    "cik": "0001335258",
+    "time": "2026-10-02T21:05:42.000Z",
+    "url": "https://www.sec.gov/Archives/edgar/data/1335258/000133525826000041/0001335258-26-000041-index.htm"
+   },
+   {
+    "form": "8-K/A",
+    "company": "TELEDYNE TECHNOLOGIES INC",
+    "cik": "0001094285",
+    "time": "2026-10-02T21:05:25.000Z",
+    "url": "https://www.sec.gov/Archives/edgar/data/1094285/000109428526000053/0001094285-26-000053-index.htm"
+   },
+   {
+    "form": "8-K12B",
+    "company": "Wisekey International Holding S.A.",
+    "cik": "0001738699",
+    "time": "2026-10-02T21:05:18.000Z",
+    "url": "https://www.sec.gov/Archives/edgar/data/1738699/000121390026106484/0001213900-26-106484-index.htm"
+   },
+   {
+    "form": "8-K",
+    "company": "BIO KEY INTERNATIONAL INC",
+    "cik": "0001019034",
+    "time": "2026-10-02T21:02:23.000Z",
+    "url": "https://www.sec.gov/Archives/edgar/data/1019034/000143774926031903/0001437749-26-031903-index.htm"
+   }
+  ]
+ },
+ "ms": 223
+}

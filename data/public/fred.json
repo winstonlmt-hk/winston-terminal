@@ -1,0 +1,11 @@
+{
+ "id": "fred",
+ "fetched_at": "2026-10-05T06:23:23.176Z",
+ "last_ok_at": null,
+ "status": "disabled",
+ "url": "https://api.stlouisfed.org/fred/series/observations?series_id=CPIAUCSL&file_type=json&sort_order=desc&limit=14",
+ "as_of": null,
+ "data": null,
+ "error": "FRED_API_KEY not set (optional)",
+ "ms": 1
+}

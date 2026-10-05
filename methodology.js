@@ -1,5 +1,6 @@
-// methodology.js – Winston Terminal v4: Methodology page (#methodology). Rendering only; no maths, no storage.
+// methodology.js – Winston Terminal v5: Methodology page (#methodology). Rendering only; no maths, no storage.
 // v4: flow-sanity line reports the live warning count (0 after the 5 Oct 2026 rebalance).
+// v5: public open-data feeds (data/feeds.js), header data chip, owner-only Live mode, updated limits/privacy lines.
 // Explains data sources, formulas, rules, checks, limits and privacy. Live values (thresholds, check results) come from ctx.
 // Registers itself in window.WT_MODULES; app.js calls render(ctx) when the route is #methodology.
 
@@ -32,16 +33,19 @@
 
     html += sec("2. Data sources and as-of", "source chips", list([
       "Every panel header shows a <b>source chip</b> (Demo seed, My Portfolio, calc.js, VC_DATA) and an <b>as-of</b> stamp: the latest price date, or the HKT time of the last recalculation.",
-      "Prices are typed in or imported from CSV. There is <b>no live market feed</b> yet; Market health stays empty until the live-data phase.",
+      "Portfolio prices are typed in or imported from CSV (or, for the owner only, fetched in <b>Live mode</b> through a private Cloudflare Worker – never shown to visitors, never saved).",
+      "Macro and news come from <b>openly licensed public feeds</b> (HKMA, NY Fed, US Treasury, Federal Reserve, ECB, SEC EDGAR, GDELT, headlines), fetched by GitHub Actions into " + code("data/feeds.js") + ". Every figure links to its source, as-of date, fetch time and snapshot id – see <a href=\"#sources\">Data Sources</a>.",
       "USD/HKD uses one manual rate (" + H.fmt(s.usd_hkd_rate, 4) + ", as of " + H.fdate(s.rate_as_of) + ") set on Rules &amp; Settings.",
-      "Header chip <b>Fresh</b> = every price in My Portfolio is dated today (HKT); <b>Stale</b> shows the oldest price date; Demo mode shows <b>Demo data</b>."]) +
+      "Header chip <b>Data DD Mon HH:MM HKT</b> = when the public feed snapshot was built (green ≤ 30 h, amber with gaps or ≤ 78 h, red older). My Portfolio appends its price status (<b>Fresh</b> = every price dated today HKT, <b>Stale</b> = oldest price date).",
+      "Feed freshness badges: FRESH · STALE · VERY STALE · NO DATA · ERROR · OFF, from the fetch age against each source's cadence and the as-of date against its normal publication lag (" + code("Calc.feedFreshness") + ")."]) +
       '<p class="note">What is real and what is demo:</p><div class="table-wrap"><table class="meth-table"><thead><tr><th>Item</th><th>Status</th></tr></thead><tbody>' +
       [["Holdings, quantities, prices (Demo portfolio)", "Demo – made up, illustrative"],
        ["Company names, tickers, value-chain node mapping", "Real"],
        ["Value-chain numbers (revenue, margins, link weights, exposures)", "Demo – illustrative, not real financials"],
        ["USD/HKD rate", "Manual input (" + H.fmt(s.usd_hkd_rate, 4) + ")"],
        ["All calculations and data checks", "Real code: calc.js / vc-calc.js, recalculated on every change"],
-       ["Live market and macro data", "Not connected yet. Public pages will only show openly licensed data (e.g. HKMA, FRED, SEC, GDELT headline links)"]]
+       ["HK Macro &amp; Peg, headlines, filings, theme radar", "Real public data (snapshot in data/feeds.js, credited on Data Sources)"],
+       ["Live prices (EODHD HK, Finnhub US)", "Real, owner-only behind a passphrase; vendor terms forbid public display"]]
         .map(function (r) { return "<tr><td>" + r[0] + "</td><td>" + r[1] + "</td></tr>"; }).join("") + "</tbody></table></div>");
 
     html += sec("3. Formulas (calc.js, average-cost method)", "calc.js", list([
@@ -70,13 +74,14 @@
         (typeof VCCalc !== "undefined" && VCCalc.flowChecks ? (function (n) { return n ? n + " warning" + (n === 1 ? "" : "s") + " now." : "0 warnings now."; })(VCCalc.flowChecks(VC_DATA).length) : "see the Supply Chain tab.")]));
 
     html += sec("7. Limitations", null, list([
-      "No live prices, no corporate actions (splits, rights, scrip dividends) and no intraday data.",
+      "Public pages have no live prices (vendor licences); no corporate actions (splits, rights, scrip dividends) and no intraday history.",
+      "HKMA's monthly bulletin series lag about a month; Fed H.10 is weekly; the ECB USD/HKD is a derived cross. Each is shown with its own as-of date.",
       "One USD/HKD rate for every date; no historical FX.",
       "Value Chain effects are a lower bound (only modelled links) and are not forecasts."]));
 
     html += sec("8. Privacy and disclaimer", null, list([
-      "No accounts, API keys, cookies or trackers. Data never leaves this browser unless you export it.",
-      "Outside calls: Chart.js 4.4.4 (jsDelivr CDN) and Google Fonts only.",
+      "No accounts, cookies or trackers, and no API key in the page or the repo. Portfolio data never leaves this browser unless you export it.",
+      "Outside calls: Chart.js 4.4.4 (jsDelivr CDN) and Google Fonts. Public feeds are pre-fetched by GitHub Actions, so visitors' browsers call no data API. Live mode (owner only) calls only the owner's Worker.",
       "Personal research tool. Not investment advice. Demo figures are illustrative, not real holdings or financials."]));
 
     html += sec("9. Version", null, '<p class="mono">Winston Terminal ' + H.esc(ctx.version || "") + " · build " + H.fdate(ctx.build) + " · Chart.js 4.4.4 · Inter + JetBrains Mono</p>");

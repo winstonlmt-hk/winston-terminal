@@ -1,7 +1,8 @@
-// app.js – Winston Terminal v4: state, storage, routing, rendering, events. No maths here (see calc.js).
+// app.js – Winston Terminal v5: state, storage, routing, rendering, events. No maths here (see calc.js).
 // v2: pages registered in window.WT_MODULES (e.g. vc-app.js, methodology.js) are routed, rendered and reset from here.
 // v3 (polish foundation): panel source/as-of chips, header data-quality chips, count-up + change flash, focused-panel brackets, watermark, version.
 // v4 (Phase 2): window.WT_APP – a small navigation/display API for cmd.js (command line, palette, tour). Coming-soon pages show plan-v3 modules.
+// v5 (Phase 3): header data chip "Data DD Mon HH:MM HKT" (macro.js snapshot), open-data Market health panel, Live overlay (live.js → setLive, in memory only), footer attribution.
 
 (function () {
   "use strict";
@@ -11,9 +12,9 @@
     mode: "demo", settings: null, demoPrices: {}, my: { holdings: [], transactions: [] },
     pf: null, model: null, page: "dashboard", sort: { key: "valueHKD", dir: -1 }, filter: "ALL",
     txFilter: "", notices: [], charts: {}, imp: null, today: hktTodayISO(),
-    flashPrev: {}, counted: false, focusKey: null, chart: "loading"
+    flashPrev: {}, counted: false, focusKey: null, chart: "loading", live: null
   };
-  const APP_VERSION = "v4.0", APP_BUILD = "2026-10-05";
+  const APP_VERSION = "v5.0", APP_BUILD = "2026-10-05";
   const $ = function (id) { return document.getElementById(id); };
 
   /* ===== SECTION: STORAGE (localStorage, keys "winstonTerminal.v1.*") ===== */
@@ -70,8 +71,15 @@
     });
     return d;
   }
+  function activePortfolio() { // Live mode overlays vendor prices on a copy – state.my and saved data are never touched
+    const pf = state.mode === "demo" ? demoPortfolio() : state.my;
+    if (!state.live) return pf;
+    const r = Calc.applyLiveQuotes(pf.holdings, state.live.quotes);
+    state.live.applied = r.applied; state.live.missing = r.missing;
+    return { holdings: r.holdings, transactions: pf.transactions, settings: pf.settings };
+  }
   function recalc() {
-    state.pf = state.mode === "demo" ? demoPortfolio() : state.my;
+    state.pf = activePortfolio();
     state.model = Calc.computePortfolio(state.pf.holdings, state.pf.transactions, state.settings);
     renderAll();
   }
@@ -99,7 +107,7 @@
   }
   function asOf() {
     const dates = state.pf.holdings.map(function (h) { return h.last_price_date; }).filter(Boolean).sort();
-    return "As of " + (dates.length ? fdate(dates[dates.length - 1]) : "—") + (state.mode === "demo" ? " · illustrative prices" : "");
+    return "As of " + (dates.length ? fdate(dates[dates.length - 1]) : "—") + (state.live ? " · LIVE vendor prices (owner only, not saved)" : state.mode === "demo" ? " · illustrative prices" : "");
   }
 
   /* ===== SECTION: HEADER, CLOCK, BANNER, FOOTER ===== */
@@ -115,8 +123,12 @@
     const vc = modules().filter(function (x) { return x.status; }).map(function (x) { return x.status(moduleCtx(x.id)); })[0], vchip = $("vc-chip");
     state.vcStatus = vc || null;
     if (vchip) { vchip.hidden = !vc; if (vc) { vchip.textContent = vc.label; vchip.className = "dq-chip mono " + (vc.ok ? "ok" : "bad"); } }
-    const f = freshness(), fchip = $("fresh-chip");
-    if (fchip) { fchip.textContent = f.label; fchip.className = "dq-chip mono " + f.cls; fchip.title = f.title; }
+    const f = freshness(), fchip = $("fresh-chip"), d = window.WT_FEEDS_UI ? window.WT_FEEDS_UI.dataChip() : { label: "Data –", cls: "bad", title: "macro.js not loaded" };
+    if (fchip) { // v5: plan §5.1 "Data DD Mon HH:MM HKT" (public feed snapshot); My/Live mode appends the price status
+      const extra = state.live || state.mode === "my" ? " · " + f.label : "";
+      fchip.textContent = d.label + extra; fchip.className = "dq-chip mono " + (extra && f.cls === "warn" ? "warn" : d.cls); fchip.title = d.title + (extra ? " Prices: " + f.title + "." : "");
+    }
+    if (window.WT_LIVE) window.WT_LIVE.renderPill();
   }
   function renderBanner() {
     const m = state.model, lines = [];
@@ -134,13 +146,15 @@
     $("banner").innerHTML = html;
   }
   function renderFooter() {
-    $("footer").innerHTML = "Personal research tool. Not investment advice." + (state.mode === "demo" ? " Demo data – illustrative prices, not real holdings." : " My Portfolio is stored only in this browser.") +
+    $("footer").innerHTML = "Personal research tool. Not investment advice." + (state.live ? " Live mode – vendor prices for the owner only, not saved or redistributed." : state.mode === "demo" ? " Demo data – illustrative prices, not real holdings." : " My Portfolio is stored only in this browser.") +
+      (window.WT_FEEDS_UI ? ' <span class="foot-attr">' + window.WT_FEEDS_UI.attribution() + "</span>" : "") +
       ' <span class="foot-meta"><a href="#methodology">Methodology</a> · <span class="mono">Winston Terminal ' + APP_VERSION + " · build " + fdate(APP_BUILD) + "</span></span>";
   }
   function renderWatermark() {
-    const w = $("watermark"), vc = state.page === "valuechain"; if (!w) return;
-    w.textContent = vc ? "ILLUSTRATIVE DATA · NOT A FORECAST" : "DEMO PORTFOLIO · ILLUSTRATIVE PRICES";
-    w.hidden = !(vc || state.mode === "demo");
+    const w = $("watermark"), vc = state.page === "valuechain", open = state.page === "macro" || state.page === "sources"; if (!w) return;
+    w.textContent = vc ? "ILLUSTRATIVE DATA · NOT A FORECAST" : state.live ? "LIVE MODE · OWNER ONLY · VENDOR PRICES" : "DEMO PORTFOLIO · ILLUSTRATIVE PRICES";
+    w.classList.toggle("live", !!state.live && !vc);
+    w.hidden = open || !(vc || state.live || state.mode === "demo");
   }
 
   /* ===== SECTION: POLISH HELPERS (panel chips, freshness, count-up, change flash, focused panel) ===== */
@@ -156,6 +170,7 @@
   }
   function recalcAsOf() { return "recalc " + clockFmt.format(new Date()).slice(0, 5) + " HKT"; }
   function freshness() {
+    if (state.live) return { label: "Live " + clockFmt.format(new Date(state.live.generated_at || Date.now())).slice(0, 5) + " · " + (state.live.applied || []).length + " priced", cls: "ok", title: "Live vendor prices (owner only, in memory)" };
     if (state.mode === "demo") return { label: "Demo data", cls: "demo", title: "Illustrative demo prices, not market data" };
     const hs = state.pf.holdings.filter(function (h) { return state.model.rows.some(function (r) { return r.symbol === h.symbol; }); });
     if (!hs.length) return { label: "No data", cls: "warn", title: "No open positions in My Portfolio" };
@@ -205,7 +220,7 @@
 
   /* ===== SECTION: MODULES (extra pages such as the Value Chain Explorer, loaded before app.js) ===== */
   function modules() { return window.WT_MODULES || []; }
-  function moduleFor(id) { return modules().find(function (m) { return m.id === id; }) || null; }
+  function moduleFor(id) { return modules().find(function (m) { return m.id === id && typeof m.render === "function"; }) || null; }
   function moduleCtx(id) {
     return { mode: state.mode, settings: state.settings, model: state.model, pf: state.pf, today: state.today, el: $("page-" + id),
       h: { fmt: fmt, fmtS: fmtS, pct: pct, wpct: wpct, tone: tone, sym: sym, esc: esc, badge: badge, fdate: fdate, toast: toast,
@@ -260,8 +275,8 @@
       holdingsTable(false) + '</div><div class="s3 stack dash-side">' +
       '<div class="panel">' + phead("By sector", "calc.js", priceAsOf()) + donutBox("sector") + "</div>" +
       '<div class="panel">' + phead("Market · currency", "calc.js", priceAsOf()) + '<div class="donuts"><div><div class="label">By market</div>' + donutBox("market", true) + '</div><div><div class="label">By currency</div>' + donutBox("currency", true) + "</div></div></div>" +
-      '<div class="panel">' + phead("Market health", "no feed yet", null, '<span class="badge soon-badge">Live data later</span>') +
-      ["HSI", "S&amp;P 500", "USD/HKD"].map(function (n) { return '<div class="kv"><span>' + n + '</span><span class="muted mono">— · not connected</span></div>'; }).join("") + "</div>" +
+      '<div class="panel" id="market-health">' + phead("Market health", "open data", null, '<a href="#macro" class="note">HK Macro &amp; Peg →</a>') +
+      (window.WT_FEEDS_UI ? window.WT_FEEDS_UI.marketHealth(moduleCtx("dashboard").h) : '<div class="kv"><span>USD/HKD</span><span class="muted mono">— · feeds not loaded</span></div>') + "</div>" +
       checksPanel() + "</div></div>";
     html += '<div class="grid">' + COMING_SOON.map(function (c) { return soonCard(c, " s6"); }).join("") + "</div>";
     const pg = $("page-dashboard"); pg.innerHTML = html;
@@ -669,7 +684,14 @@
     showChecks: function () { if (state.page !== "dashboard") location.hash = "#dashboard"; setTimeout(function () { const p = $("checks-panel"); if (p) { p.scrollIntoView({ block: "center" }); focusPanel(p); } }, 60); },
     analyst: function (open) { $("analyst-panel").hidden = !open; },
     module: function (id) { return moduleFor(id); },
-    toast: toast, sym: sym, esc: esc, version: APP_VERSION
+    toast: toast, sym: sym, esc: esc, version: APP_VERSION,
+    modal: function (title, html, srcHtml) { openModal(title, html); const m = $("modal-src"); if (m && srcHtml !== undefined) m.innerHTML = srcHtml; },
+    setLive: function (live) { // v5 Live mode (live.js): quotes overlay in memory; null = back to demo/saved prices
+      state.live = live && Array.isArray(live.quotes) ? { quotes: live.quotes, errors: live.errors || [], generated_at: live.generated_at || new Date().toISOString(), applied: [], missing: [] } : null;
+      state.flashPrev = {}; recalc();
+      return state.live ? { applied: state.live.applied, missing: state.live.missing } : { applied: [], missing: [] };
+    },
+    isLive: function () { return !!state.live; }
   };
 
   /* ===== SECTION: START ===== */
@@ -682,7 +704,7 @@
       cdn.addEventListener("load", function () { if (typeof Chart === "undefined") { chartFailed(); renderBanner(); } else { state.chart = "ready"; Chart.defaults.color = "#8A94A6"; } renderPage(); });
       cdn.addEventListener("error", function () { chartFailed(); renderBanner(); renderPage(); });
     }
-    state.pf = state.mode === "demo" ? demoPortfolio() : state.my;
+    state.pf = activePortfolio();
     state.model = Calc.computePortfolio(state.pf.holdings, state.pf.transactions, state.settings);
     tick(); setInterval(tick, 1000);
     const sk = $("load-skel"); if (sk) sk.parentNode.removeChild(sk);

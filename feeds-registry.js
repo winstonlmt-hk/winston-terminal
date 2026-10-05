@@ -1,0 +1,136 @@
+// feeds-registry.js – Winston Terminal v5 (Phase 3): the tiered feed registry. One entry per data source.
+// Loaded by the browser (plain <script src>, sets window.WT_FEED_REGISTRY) AND by the Node fetch scripts (module.exports).
+// Tiers (borrowing-guide pattern, reimplemented): 1 = official / primary statistics, 2 = established publisher headlines,
+// 3 = aggregated or derived signal, 4 = vendor data (Live mode only, never published). "state_affiliated" flags media with state ties.
+// "display" is the rule the UI follows; "public" false means the data never appears on the public site or in data/.
+// Licence notes were checked on 5 Oct 2026; [U] marks terms not confirmed from a primary page – recheck before relying on them.
+
+/* ===== SECTION: REGISTRY ===== */
+var WT_FEED_REGISTRY = [
+  { id: "hkma_liquidity", name: "HKMA – Daily figures of interbank liquidity", tier: 1, state_affiliated: false, official: true, public: true,
+    url: "https://api.hkma.gov.hk/public/market-data-and-statistics/daily-monetary-statistics/daily-figures-interbank-liquidity",
+    home: "https://apidocs.hkma.gov.hk/", licence: "HKMA Open API terms – display and analysis allowed, credit the HKMA, reproduce accurately",
+    licence_url: "https://apidocs.hkma.gov.hk/documentation/", attribution: "Source: Hong Kong Monetary Authority (HKMA)",
+    display: "Figures shown as published, with as-of date and HKMA credit", cadence_h: 24, lag_days: 4,
+    used_in: "Peg band (CU limits), Aggregate Balance, HIBOR overnight / 1M fixing" },
+  { id: "hkma_er", name: "HKMA – Monthly Statistical Bulletin: daily exchange rates", tier: 1, state_affiliated: false, official: true, public: true,
+    url: "https://api.hkma.gov.hk/public/market-data-and-statistics/monthly-statistical-bulletin/er-ir/er-eeri-daily",
+    home: "https://apidocs.hkma.gov.hk/", licence: "HKMA Open API terms – display and analysis allowed, credit the HKMA",
+    licence_url: "https://apidocs.hkma.gov.hk/documentation/", attribution: "Source: Hong Kong Monetary Authority (HKMA)",
+    display: "Published monthly, so it lags about one month – shown with its own as-of date", cadence_h: 24, lag_days: 45,
+    used_in: "USD/HKD official month series (cross-check)" },
+  { id: "hkma_hibor", name: "HKMA – Monthly Statistical Bulletin: daily interbank rates", tier: 1, state_affiliated: false, official: true, public: true,
+    url: "https://api.hkma.gov.hk/public/market-data-and-statistics/monthly-statistical-bulletin/er-ir/hk-interbank-ir-daily",
+    home: "https://apidocs.hkma.gov.hk/", licence: "HKMA Open API terms – display and analysis allowed, credit the HKMA",
+    licence_url: "https://apidocs.hkma.gov.hk/documentation/", attribution: "Source: Hong Kong Monetary Authority (HKMA)",
+    display: "HIBOR term curve, lags about one month – shown with its own as-of date", cadence_h: 24, lag_days: 45,
+    used_in: "HIBOR term curve (O/N to 12M)" },
+  { id: "nyfed_sofr", name: "Federal Reserve Bank of New York – SOFR", tier: 1, state_affiliated: false, official: true, public: true,
+    url: "https://markets.newyorkfed.org/api/rates/secured/sofr/last/30.json",
+    home: "https://www.newyorkfed.org/markets/reference-rates/sofr", licence: "Public reference rate; cite the New York Fed [U: exact reuse terms]",
+    licence_url: "https://www.newyorkfed.org/markets/reference-rates/additional-information-about-reference-rates", attribution: "Source: Federal Reserve Bank of New York",
+    display: "Rate and effective date as published", cadence_h: 24, lag_days: 4, used_in: "HIBOR − SOFR spread" },
+  { id: "nyfed_effr", name: "Federal Reserve Bank of New York – EFFR", tier: 1, state_affiliated: false, official: true, public: true,
+    url: "https://markets.newyorkfed.org/api/rates/unsecured/effr/last/30.json",
+    home: "https://www.newyorkfed.org/markets/reference-rates/effr", licence: "Public reference rate; cite the New York Fed [U: exact reuse terms]",
+    licence_url: "https://www.newyorkfed.org/markets/reference-rates/additional-information-about-reference-rates", attribution: "Source: Federal Reserve Bank of New York",
+    display: "Rate, target range and effective date as published", cadence_h: 24, lag_days: 4, used_in: "Fed funds context" },
+  { id: "ust_curve", name: "US Treasury – Daily par yield curve rates", tier: 1, state_affiliated: false, official: true, public: true,
+    url: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/pages/xml?data=daily_treasury_yield_curve&field_tdr_date_value=YYYY",
+    home: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates", licence: "US Government work – public domain",
+    licence_url: "https://www.usa.gov/government-copyright", attribution: "Source: U.S. Department of the Treasury",
+    display: "Par yields as published", cadence_h: 24, lag_days: 4, used_in: "US curve, 2s10s, US 10Y on the dashboard" },
+  { id: "fed_h10", name: "Federal Reserve Board – H.10 foreign exchange rates (HKD)", tier: 1, state_affiliated: false, official: true, public: true,
+    url: "https://www.federalreserve.gov/datadownload/Output.aspx?rel=H10&series=60f32914ab61dfab590e0e470153e3ae&lastobs=30&filetype=csv&label=include&layout=seriescolumn",
+    home: "https://www.federalreserve.gov/releases/h10/", licence: "US Government work – public domain",
+    licence_url: "https://www.federalreserve.gov/disclaimer.htm", attribution: "Source: Board of Governors of the Federal Reserve System, H.10",
+    display: "Noon buying rate in New York; released weekly, so it lags a few days", cadence_h: 24, lag_days: 12, used_in: "USD/HKD vs the 7.75–7.85 band" },
+  { id: "ecb_fx", name: "European Central Bank – euro reference rates (USD, HKD)", tier: 1, state_affiliated: false, official: true, public: true,
+    url: "https://data-api.ecb.europa.eu/service/data/EXR/D.HKD+USD.EUR.SP00.A?lastNObservations=30&format=csvdata",
+    home: "https://data.ecb.europa.eu/", licence: "Free reuse if the source is quoted; data not modified (the USD/HKD cross is labelled as derived)",
+    licence_url: "https://www.ecb.europa.eu/stats/ecb_statistics/governance_and_quality_framework/html/usage_policy.en.html", attribution: "Source: ECB statistics",
+    display: "USD/HKD shown as a derived cross (HKD per EUR ÷ USD per EUR), labelled as such", cadence_h: 24, lag_days: 4, used_in: "USD/HKD daily cross vs the band" },
+  { id: "fomc_calendar", name: "Federal Reserve – FOMC meeting calendar", tier: 1, state_affiliated: false, official: true, public: true,
+    url: "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+    home: "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm", licence: "US Government work – public domain",
+    licence_url: "https://www.federalreserve.gov/disclaimer.htm", attribution: "Source: Board of Governors of the Federal Reserve System",
+    display: "Meeting dates with link to the calendar", cadence_h: 168, lag_days: 400, used_in: "Next FOMC date" },
+  { id: "sec_filings", name: "SEC EDGAR – company submissions (demo US names)", tier: 1, state_affiliated: false, official: true, public: true,
+    url: "https://data.sec.gov/submissions/CIK##########.json",
+    home: "https://www.sec.gov/edgar/sec-api-documentation", licence: "Public EDGAR data; declared User-Agent, max 10 requests/second",
+    licence_url: "https://www.sec.gov/privacy#security", attribution: "Source: U.S. SEC EDGAR",
+    display: "Form, filing date and link only", cadence_h: 24, lag_days: 100, used_in: "Recent 8-K / 10-Q / 10-K for AAPL, MSFT, NVDA, JPM, BRK-B" },
+  { id: "sec_8k_atom", name: "SEC EDGAR – latest 8-K filings (Atom)", tier: 1, state_affiliated: false, official: true, public: true,
+    url: "https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&type=8-K&count=40&output=atom",
+    home: "https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent", licence: "Public EDGAR data; declared User-Agent, max 10 requests/second",
+    licence_url: "https://www.sec.gov/privacy#security", attribution: "Source: U.S. SEC EDGAR",
+    display: "Company, form, time and link only", cadence_h: 24, lag_days: 4, used_in: "Market-wide 8-K tape" },
+  { id: "rss_fed", name: "Federal Reserve – press releases (RSS)", tier: 1, state_affiliated: false, official: true, public: true,
+    url: "https://www.federalreserve.gov/feeds/press_all.xml", home: "https://www.federalreserve.gov/feeds/feeds.htm",
+    licence: "US Government work – public domain", licence_url: "https://www.federalreserve.gov/disclaimer.htm", attribution: "Federal Reserve",
+    display: "Headline, time and link only – no article text", cadence_h: 6, lag_days: 7, used_in: "Headlines" },
+  { id: "rss_sec", name: "SEC – press releases (RSS)", tier: 1, state_affiliated: false, official: true, public: true,
+    url: "https://www.sec.gov/news/pressreleases.rss", home: "https://www.sec.gov/about/rss-feeds",
+    licence: "US Government work – public domain", licence_url: "https://www.sec.gov/privacy", attribution: "U.S. SEC",
+    display: "Headline, time and link only – no article text", cadence_h: 6, lag_days: 7, used_in: "Headlines" },
+  { id: "rss_hkgov", name: "HKSAR Government – press releases (RSS)", tier: 1, state_affiliated: false, official: true, public: true,
+    url: "https://www.info.gov.hk/gia/rss/general_en.xml", home: "https://www.info.gov.hk/gia/rss/",
+    licence: "HKSAR Government RSS – headline links for personal/non-commercial use [U]", licence_url: "https://www.gov.hk/en/about/rss.htm", attribution: "HKSAR Government (info.gov.hk)",
+    display: "Headline, time and link only – no article text", cadence_h: 6, lag_days: 3, used_in: "Headlines" },
+  { id: "rss_rthk", name: "RTHK – Finance news (RSS)", tier: 2, state_affiliated: true, official: false, public: true,
+    url: "https://rthk.hk/rthk/news/rss/e_expressnews_efinance.xml", home: "https://news.rthk.hk/rthk/en/rss.htm",
+    licence: "Publisher RSS – headline + link for personal use [U]", licence_url: "https://www.rthk.hk/about/disclaimer", attribution: "RTHK (public broadcaster, HKSAR Government department)",
+    display: "Headline, time and link only – no article text; flagged state-affiliated", cadence_h: 6, lag_days: 3, used_in: "Headlines" },
+  { id: "rss_scmp", name: "South China Morning Post – Business (RSS)", tier: 2, state_affiliated: false, official: false, public: true,
+    url: "https://www.scmp.com/rss/92/feed/", home: "https://www.scmp.com/rss",
+    licence: "Publisher RSS – headline + link for personal, non-commercial use [U]", licence_url: "https://www.scmp.com/terms-conditions", attribution: "South China Morning Post",
+    display: "Headline, time and link only – no article text", cadence_h: 6, lag_days: 3, used_in: "Headlines" },
+  { id: "gdelt", name: "GDELT Project – DOC 2.0 theme volume", tier: 3, state_affiliated: false, official: false, public: true,
+    url: "https://api.gdeltproject.org/api/v2/doc/doc?mode=timelinevolraw&timespan=30d&format=json&query=…",
+    home: "https://www.gdeltproject.org/", licence: "Unlimited use including commercial, with citation; max 1 request per 5 s",
+    licence_url: "https://www.gdeltproject.org/about.html#termsofuse", attribution: "Source: The GDELT Project",
+    display: "Article counts and a derived z-score; top headline links only", cadence_h: 6, lag_days: 3, used_in: "Theme radar (8 themes)" },
+  { id: "datagovhk", name: "DATA.GOV.HK – open-data catalogue (CKAN)", tier: 1, state_affiliated: false, official: true, public: true,
+    url: "https://data.gov.hk/en-data/api/3/action/package_search?q=exchange%20rate&rows=5", home: "https://data.gov.hk/en/",
+    licence: "DATA.GOV.HK terms – free commercial and non-commercial reuse with attribution", licence_url: "https://data.gov.hk/en/terms-and-conditions",
+    attribution: "Source: DATA.GOV.HK (HKSAR Government)", display: "Dataset titles and links only (catalogue + health check)", cadence_h: 168, lag_days: 30,
+    used_in: "Related HK open datasets on the Data Sources page" },
+  { id: "fred", name: "FRED® – Federal Reserve Bank of St. Louis (optional)", tier: 1, state_affiliated: false, official: true, public: true, needs_key: "FRED_API_KEY",
+    url: "https://api.stlouisfed.org/fred/series/observations?series_id=CPIAUCSL&file_type=json", home: "https://fred.stlouisfed.org/",
+    licence: "FRED API terms – show the FRED notice; third-party series keep their own terms", licence_url: "https://fred.stlouisfed.org/docs/api/terms_of_use.html",
+    attribution: "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
+    display: "Off unless the FRED_API_KEY repository secret is set; then US CPI with the FRED notice", cadence_h: 24, lag_days: 60, used_in: "US CPI (optional)" },
+  { id: "eodhd", name: "EODHD – HK delayed quotes (free plan)", tier: 4, state_affiliated: false, official: false, public: false, needs_key: "EODHD_KEY",
+    url: "https://eodhd.com/api/real-time/{SYMBOL}.HK", home: "https://eodhd.com/", licence: "Vendor terms – personal use only, no redistribution or public display",
+    licence_url: "https://eodhd.com/financial-apis/terms-conditions", attribution: "Prices: EODHD (owner's personal Live mode only)",
+    display: "Live mode only, behind the passphrase via the Cloudflare Worker; never written to data/ or shown publicly", cadence_h: 0, lag_days: 0, used_in: "Live mode – HK holdings" },
+  { id: "finnhub", name: "Finnhub – US quotes (free plan)", tier: 4, state_affiliated: false, official: false, public: false, needs_key: "FINNHUB_KEY",
+    url: "https://finnhub.io/api/v1/quote?symbol={SYMBOL}", home: "https://finnhub.io/", licence: "Vendor terms – personal use only, no redistribution or public display",
+    licence_url: "https://finnhub.io/terms-of-service", attribution: "Prices: Finnhub (owner's personal Live mode only)",
+    display: "Live mode only, behind the passphrase via the Cloudflare Worker; never written to data/ or shown publicly", cadence_h: 0, lag_days: 0, used_in: "Live mode – US holdings" }
+];
+
+/* ===== SECTION: GDELT THEMES (plan v3 §4.4 Idea Lab / Event Tracker themes) ===== */
+var WT_GDELT_THEMES = [
+  { id: "export_controls", label: "Chip export controls", query: '"export controls" (semiconductor OR chip)' },
+  { id: "taiwan_strait", label: "Taiwan Strait", query: '"Taiwan Strait"' },
+  { id: "tariffs", label: "US–China tariffs", query: 'tariffs China "United States"' },
+  { id: "red_sea", label: "Red Sea shipping", query: '"Red Sea" shipping' },
+  { id: "hk_property", label: "HK property policy", query: '"Hong Kong" property (mortgage OR "stamp duty")' },
+  { id: "ai_capex", label: "AI capex", query: '"data center" (capex OR "capital expenditure") AI' },
+  { id: "rare_earths", label: "Rare earths", query: '"rare earth" (export OR ban OR quota)' },
+  { id: "china_stimulus", label: "China stimulus", query: 'China stimulus (PBOC OR "fiscal")' }
+];
+
+/* ===== SECTION: SEC DEMO NAMES (US holdings in the demo seed → CIK) ===== */
+var WT_SEC_CIKS = [
+  { symbol: "AAPL.US", cik: "0000320193", name: "Apple" }, { symbol: "MSFT.US", cik: "0000789019", name: "Microsoft" },
+  { symbol: "NVDA.US", cik: "0001045810", name: "NVIDIA" }, { symbol: "JPM.US", cik: "0000019617", name: "JPMorgan Chase" },
+  { symbol: "BRK-B.US", cik: "0001067983", name: "Berkshire Hathaway" }
+];
+
+/* ===== SECTION: EXPORT (browser global + Node) ===== */
+if (typeof window !== "undefined") { window.WT_FEED_REGISTRY = WT_FEED_REGISTRY; window.WT_GDELT_THEMES = WT_GDELT_THEMES; window.WT_SEC_CIKS = WT_SEC_CIKS; }
+if (typeof module !== "undefined" && module.exports) module.exports = { registry: WT_FEED_REGISTRY, themes: WT_GDELT_THEMES, ciks: WT_SEC_CIKS };
+
+// END OF FILE: feeds-registry.js

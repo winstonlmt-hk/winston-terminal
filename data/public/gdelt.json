@@ -1,0 +1,583 @@
+{
+ "id": "gdelt",
+ "fetched_at": "2026-10-05T06:30:00.495Z",
+ "last_ok_at": "2026-10-05T06:30:00.495Z",
+ "status": "ok",
+ "url": "https://api.gdeltproject.org/api/v2/doc/doc?format=json&timespan=30d&query=…&mode=timelinevolraw",
+ "as_of": "2026-10-02",
+ "data": {
+  "themes": [
+   {
+    "id": "export_controls",
+    "label": "Chip export controls",
+    "query": "\"export controls\" (semiconductor OR chip)",
+    "series": [
+     {
+      "date": "2026-09-06",
+      "count": 3,
+      "total": 98645
+     },
+     {
+      "date": "2026-09-07",
+      "count": 6,
+      "total": 118079
+     },
+     {
+      "date": "2026-09-08",
+      "count": 7,
+      "total": 77318
+     },
+     {
+      "date": "2026-09-09",
+      "count": 6,
+      "total": 158938
+     },
+     {
+      "date": "2026-09-10",
+      "count": 14,
+      "total": 155062
+     },
+     {
+      "date": "2026-09-11",
+      "count": 10,
+      "total": 154253
+     },
+     {
+      "date": "2026-09-12",
+      "count": 7,
+      "total": 120863
+     },
+     {
+      "date": "2026-09-13",
+      "count": 0,
+      "total": 29203
+     },
+     {
+      "date": "2026-09-20",
+      "count": 12,
+      "total": 105485
+     },
+     {
+      "date": "2026-09-21",
+      "count": 41,
+      "total": 108510
+     },
+     {
+      "date": "2026-09-22",
+      "count": 16,
+      "total": 105779
+     },
+     {
+      "date": "2026-09-23",
+      "count": 44,
+      "total": 149817
+     },
+     {
+      "date": "2026-09-24",
+      "count": 57,
+      "total": 155942
+     },
+     {
+      "date": "2026-09-25",
+      "count": 26,
+      "total": 58811
+     },
+     {
+      "date": "2026-09-27",
+      "count": 5,
+      "total": 77392
+     },
+     {
+      "date": "2026-09-28",
+      "count": 60,
+      "total": 121105
+     },
+     {
+      "date": "2026-09-29",
+      "count": 10,
+      "total": 134919
+     },
+     {
+      "date": "2026-09-30",
+      "count": 6,
+      "total": 111356
+     },
+     {
+      "date": "2026-10-01",
+      "count": 14,
+      "total": 174731
+     },
+     {
+      "date": "2026-10-02",
+      "count": 39,
+      "total": 46896
+     }
+    ],
+    "articles": [],
+    "carried_over": true
+   },
+   {
+    "id": "taiwan_strait",
+    "label": "Taiwan Strait",
+    "query": "\"Taiwan Strait\"",
+    "series": [
+     {
+      "date": "2026-09-06",
+      "count": 25,
+      "total": 98645
+     },
+     {
+      "date": "2026-09-07",
+      "count": 50,
+      "total": 118079
+     },
+     {
+      "date": "2026-09-08",
+      "count": 33,
+      "total": 77318
+     },
+     {
+      "date": "2026-09-09",
+      "count": 104,
+      "total": 158938
+     },
+     {
+      "date": "2026-09-10",
+      "count": 37,
+      "total": 155062
+     },
+     {
+      "date": "2026-09-11",
+      "count": 52,
+      "total": 154253
+     },
+     {
+      "date": "2026-09-12",
+      "count": 33,
+      "total": 120863
+     },
+     {
+      "date": "2026-09-13",
+      "count": 10,
+      "total": 29203
+     },
+     {
+      "date": "2026-09-20",
+      "count": 40,
+      "total": 105485
+     },
+     {
+      "date": "2026-09-21",
+      "count": 82,
+      "total": 108510
+     },
+     {
+      "date": "2026-09-22",
+      "count": 77,
+      "total": 105779
+     },
+     {
+      "date": "2026-09-23",
+      "count": 121,
+      "total": 149817
+     },
+     {
+      "date": "2026-09-24",
+      "count": 137,
+      "total": 155942
+     },
+     {
+      "date": "2026-09-25",
+      "count": 55,
+      "total": 58811
+     },
+     {
+      "date": "2026-09-27",
+      "count": 51,
+      "total": 77392
+     },
+     {
+      "date": "2026-09-28",
+      "count": 51,
+      "total": 121105
+     },
+     {
+      "date": "2026-09-29",
+      "count": 69,
+      "total": 134919
+     },
+     {
+      "date": "2026-09-30",
+      "count": 40,
+      "total": 111356
+     },
+     {
+      "date": "2026-10-01",
+      "count": 57,
+      "total": 174731
+     },
+     {
+      "date": "2026-10-02",
+      "count": 50,
+      "total": 46896
+     }
+    ],
+    "articles": []
+   },
+   {
+    "id": "tariffs",
+    "label": "US–China tariffs",
+    "query": "tariffs China \"United States\"",
+    "series": [],
+    "error": true
+   },
+   {
+    "id": "red_sea",
+    "label": "Red Sea shipping",
+    "query": "\"Red Sea\" shipping",
+    "series": [],
+    "error": true
+   },
+   {
+    "id": "hk_property",
+    "label": "HK property policy",
+    "query": "\"Hong Kong\" property (mortgage OR \"stamp duty\")",
+    "series": [
+     {
+      "date": "2026-09-06",
+      "count": 6,
+      "total": 98645
+     },
+     {
+      "date": "2026-09-07",
+      "count": 4,
+      "total": 118079
+     },
+     {
+      "date": "2026-09-08",
+      "count": 4,
+      "total": 77318
+     },
+     {
+      "date": "2026-09-09",
+      "count": 9,
+      "total": 158938
+     },
+     {
+      "date": "2026-09-10",
+      "count": 10,
+      "total": 155062
+     },
+     {
+      "date": "2026-09-11",
+      "count": 6,
+      "total": 154253
+     },
+     {
+      "date": "2026-09-12",
+      "count": 3,
+      "total": 120863
+     },
+     {
+      "date": "2026-09-13",
+      "count": 1,
+      "total": 29203
+     },
+     {
+      "date": "2026-09-20",
+      "count": 4,
+      "total": 105485
+     },
+     {
+      "date": "2026-09-21",
+      "count": 6,
+      "total": 108510
+     },
+     {
+      "date": "2026-09-22",
+      "count": 7,
+      "total": 105779
+     },
+     {
+      "date": "2026-09-23",
+      "count": 12,
+      "total": 149817
+     },
+     {
+      "date": "2026-09-24",
+      "count": 15,
+      "total": 155942
+     },
+     {
+      "date": "2026-09-25",
+      "count": 9,
+      "total": 58811
+     },
+     {
+      "date": "2026-09-27",
+      "count": 5,
+      "total": 77392
+     },
+     {
+      "date": "2026-09-28",
+      "count": 11,
+      "total": 121105
+     },
+     {
+      "date": "2026-09-29",
+      "count": 24,
+      "total": 134919
+     },
+     {
+      "date": "2026-09-30",
+      "count": 16,
+      "total": 111356
+     },
+     {
+      "date": "2026-10-01",
+      "count": 17,
+      "total": 174731
+     },
+     {
+      "date": "2026-10-02",
+      "count": 2,
+      "total": 46896
+     }
+    ]
+   },
+   {
+    "id": "ai_capex",
+    "label": "AI capex",
+    "query": "\"data center\" (capex OR \"capital expenditure\") AI",
+    "series": [],
+    "error": true
+   },
+   {
+    "id": "rare_earths",
+    "label": "Rare earths",
+    "query": "\"rare earth\" (export OR ban OR quota)",
+    "series": [
+     {
+      "date": "2026-09-06",
+      "count": 12,
+      "total": 98645
+     },
+     {
+      "date": "2026-09-07",
+      "count": 12,
+      "total": 118079
+     },
+     {
+      "date": "2026-09-08",
+      "count": 11,
+      "total": 77318
+     },
+     {
+      "date": "2026-09-09",
+      "count": 8,
+      "total": 158938
+     },
+     {
+      "date": "2026-09-10",
+      "count": 13,
+      "total": 155062
+     },
+     {
+      "date": "2026-09-11",
+      "count": 30,
+      "total": 154253
+     },
+     {
+      "date": "2026-09-12",
+      "count": 6,
+      "total": 120863
+     },
+     {
+      "date": "2026-09-13",
+      "count": 1,
+      "total": 29203
+     },
+     {
+      "date": "2026-09-20",
+      "count": 40,
+      "total": 105485
+     },
+     {
+      "date": "2026-09-21",
+      "count": 35,
+      "total": 108510
+     },
+     {
+      "date": "2026-09-22",
+      "count": 63,
+      "total": 105779
+     },
+     {
+      "date": "2026-09-23",
+      "count": 70,
+      "total": 149817
+     },
+     {
+      "date": "2026-09-24",
+      "count": 224,
+      "total": 155942
+     },
+     {
+      "date": "2026-09-25",
+      "count": 33,
+      "total": 58811
+     },
+     {
+      "date": "2026-09-27",
+      "count": 8,
+      "total": 77392
+     },
+     {
+      "date": "2026-09-28",
+      "count": 22,
+      "total": 121105
+     },
+     {
+      "date": "2026-09-29",
+      "count": 20,
+      "total": 134919
+     },
+     {
+      "date": "2026-09-30",
+      "count": 8,
+      "total": 111356
+     },
+     {
+      "date": "2026-10-01",
+      "count": 15,
+      "total": 174731
+     },
+     {
+      "date": "2026-10-02",
+      "count": 5,
+      "total": 46896
+     }
+    ],
+    "articles": [],
+    "carried_over": true
+   },
+   {
+    "id": "china_stimulus",
+    "label": "China stimulus",
+    "query": "China stimulus (PBOC OR \"fiscal\")",
+    "series": [
+     {
+      "date": "2026-09-06",
+      "count": 2,
+      "total": 98645
+     },
+     {
+      "date": "2026-09-07",
+      "count": 5,
+      "total": 118079
+     },
+     {
+      "date": "2026-09-08",
+      "count": 3,
+      "total": 77318
+     },
+     {
+      "date": "2026-09-09",
+      "count": 4,
+      "total": 158938
+     },
+     {
+      "date": "2026-09-10",
+      "count": 8,
+      "total": 155062
+     },
+     {
+      "date": "2026-09-11",
+      "count": 9,
+      "total": 154253
+     },
+     {
+      "date": "2026-09-12",
+      "count": 4,
+      "total": 120863
+     },
+     {
+      "date": "2026-09-13",
+      "count": 1,
+      "total": 29203
+     },
+     {
+      "date": "2026-09-20",
+      "count": 2,
+      "total": 105485
+     },
+     {
+      "date": "2026-09-21",
+      "count": 6,
+      "total": 108510
+     },
+     {
+      "date": "2026-09-22",
+      "count": 4,
+      "total": 105779
+     },
+     {
+      "date": "2026-09-23",
+      "count": 9,
+      "total": 149817
+     },
+     {
+      "date": "2026-09-24",
+      "count": 4,
+      "total": 155942
+     },
+     {
+      "date": "2026-09-25",
+      "count": 1,
+      "total": 58811
+     },
+     {
+      "date": "2026-09-27",
+      "count": 3,
+      "total": 77392
+     },
+     {
+      "date": "2026-09-28",
+      "count": 6,
+      "total": 121105
+     },
+     {
+      "date": "2026-09-29",
+      "count": 17,
+      "total": 134919
+     },
+     {
+      "date": "2026-09-30",
+      "count": 4,
+      "total": 111356
+     },
+     {
+      "date": "2026-10-01",
+      "count": 6,
+      "total": 174731
+     },
+     {
+      "date": "2026-10-02",
+      "count": 2,
+      "total": 46896
+     }
+    ],
+    "articles": []
+   }
+  ],
+  "note": "Daily count of matching articles in GDELT's monitored news (30 days)"
+ },
+ "warnings": [
+  "export_controls: fetch failed (kept previous run)",
+  "tariffs: HTTP 429 – Please limit requests to one every 5 seconds or c",
+  "red_sea: HTTP 429 – Please limit requests to one every 5 seconds or c",
+  "ai_capex: HTTP 429 – Please limit requests to one every 5 seconds or c",
+  "rare_earths: HTTP 429 – Please limit requests to one every 5 seconds or c (kept previous run)"
+ ],
+ "ms": 725140
+}

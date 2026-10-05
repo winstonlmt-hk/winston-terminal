@@ -1,5 +1,6 @@
 // calc.js – Winston Terminal v1: all calculations as pure functions (no DOM, no clock, no storage)
 // Method: average cost. Full precision inside; round only for display (app.js) or export.
+// v5 (Phase 3): FEEDS + PEG section – peg-band position, spreads, cross rate, z-score, feed freshness, Live price overlay (all pure; "now" is passed in).
 
 const Calc = (function () {
   "use strict";
@@ -281,13 +282,74 @@ const Calc = (function () {
       sortTransactions(txs).map(function (t) { return [t.trade_date, t.symbol, t.type, t.quantity, t.price, t.currency, t.fees || 0, t.note || "", t.source || ""]; }));
   }
 
+  /* ===== SECTION: FEEDS + PEG (v5 Phase 3 – pure; callers pass "now", nothing reads the clock) ===== */
+  const PEG = { strong: 7.75, weak: 7.85, centre: 7.80 };
+  function pegPosition(rate, strong, weak) { // where USD/HKD sits inside the Convertible Undertaking band
+    const r = num(rate), lo = isFinite(num(strong)) ? num(strong) : PEG.strong, hi = isFinite(num(weak)) ? num(weak) : PEG.weak;
+    if (!isFinite(r) || r <= 0 || !(hi > lo)) return null;
+    const pct = (r - lo) / (hi - lo) * 100, toWeak = (hi - r) * 10000, toStrong = (r - lo) * 10000;
+    return { rate: r, strong: lo, weak: hi, inBand: r >= lo - EPS && r <= hi + EPS, pctOfBand: pct, pipsToWeak: toWeak, pipsToStrong: toStrong,
+      zone: r > hi + EPS ? "outside-weak" : r < lo - EPS ? "outside-strong" : toWeak <= 50 + EPS ? "near-weak" : toStrong <= 50 + EPS ? "near-strong" : "inside" };
+  }
+  function spreadBp(a, b) { const x = num(a), y = num(b); return isFinite(x) && isFinite(y) ? (x - y) * 100 : null; } // % p.a. → basis points
+  function crossRate(hkdPerEur, usdPerEur) { const h = num(hkdPerEur), u = num(usdPerEur); return h > 0 && u > 0 ? h / u : null; } // USD/HKD from two EUR rates
+  function seriesChange(seriesDesc, key, n) { // latest minus the value n observations earlier (series newest first)
+    if (!Array.isArray(seriesDesc) || seriesDesc.length <= n) return null;
+    const a = num(seriesDesc[0][key]), b = num(seriesDesc[n][key]); return isFinite(a) && isFinite(b) ? a - b : null;
+  }
+  function alignSpread(aDesc, aKey, bDesc, bKey) { // dates present in both series, oldest first, spread in bp
+    const bm = {}; (bDesc || []).forEach(function (r) { if (isFinite(num(r[bKey]))) bm[r.date] = num(r[bKey]); });
+    return (aDesc || []).filter(function (r) { return bm[r.date] !== undefined && isFinite(num(r[aKey])); })
+      .map(function (r) { return { date: r.date, a: num(r[aKey]), b: bm[r.date], bp: spreadBp(r[aKey], bm[r.date]) }; })
+      .sort(function (x, y) { return x.date < y.date ? -1 : x.date > y.date ? 1 : 0; });
+  }
+  function zScore(values) { // latest value vs mean and SD of the earlier values (chronological input)
+    const v = (values || []).map(num).filter(isFinite); if (v.length < 3) return null;
+    const last = v[v.length - 1], base = v.slice(0, -1), mean = base.reduce(function (a, x) { return a + x; }, 0) / base.length;
+    const sd = Math.sqrt(base.reduce(function (a, x) { return a + (x - mean) * (x - mean); }, 0) / (base.length - 1));
+    return { latest: last, mean: mean, sd: sd, z: sd > EPS ? (last - mean) / sd : 0 };
+  }
+  const FRESH_STATES = ["fresh", "stale", "very_stale", "no_data", "error", "disabled"];
+  function feedFreshness(src, nowMs, cadenceH, lagDays) { // borrowing-guide states; lagDays = how far "as of" may trail a fresh fetch
+    if (!src) return { state: "no_data", fetchAgeH: null, asOfAgeD: null };
+    if (src.status === "disabled") return { state: "disabled", fetchAgeH: null, asOfAgeD: null };
+    if (!src.data) return { state: src.status === "error" ? "error" : "no_data", fetchAgeH: null, asOfAgeD: null };
+    const okAt = Date.parse(src.last_ok_at || src.fetched_at), asOf = src.as_of ? Date.parse(src.as_of + "T23:59:59+08:00") : NaN;
+    const fetchAgeH = isFinite(okAt) ? (nowMs - okAt) / 3.6e6 : Infinity, asOfAgeD = isFinite(asOf) ? Math.max(0, (nowMs - asOf) / 864e5) : Infinity;
+    const c = cadenceH > 0 ? cadenceH : 24, lag = lagDays >= 0 ? lagDays : 4;
+    let state = fetchAgeH <= 2 * c + 6 && asOfAgeD <= lag ? "fresh" : fetchAgeH <= 6 * c + 24 && asOfAgeD <= 2 * lag + 3 ? "stale" : "very_stale";
+    return { state: state, fetchAgeH: fetchAgeH, asOfAgeD: asOfAgeD, failing: src.status === "error" };
+  }
+  const MON3 = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  function hktStamp(iso) { // "05 Oct 14:20" in Hong Kong time (UTC+8, no DST)
+    const t = Date.parse(iso); if (!isFinite(t)) return null;
+    const d = new Date(t + 8 * 3600 * 1000), p = function (n) { return String(n).padStart(2, "0"); };
+    return p(d.getUTCDate()) + " " + MON3[d.getUTCMonth()] + " " + p(d.getUTCHours()) + ":" + p(d.getUTCMinutes());
+  }
+  function nextMeeting(meetings, todayISO) { return (meetings || []).filter(function (m) { return m.end >= todayISO; }).sort(function (a, b) { return a.start < b.start ? -1 : 1; })[0] || null; }
+  function pickLatest(cands) { // freshest valid observation; ties keep the earlier (preferred) candidate
+    return (cands || []).filter(function (c) { return c && c.date && isFinite(num(c.value)); }).reduce(function (best, c) { return !best || c.date > best.date ? c : best; }, null);
+  }
+  function applyLiveQuotes(holdings, quotes) { // Live mode: copies holdings with vendor prices; the input is untouched
+    const q = {}; (quotes || []).forEach(function (x) { if (x && x.symbol && num(x.price) > 0) q[x.symbol] = x; });
+    const applied = [], missing = [];
+    const out = (holdings || []).map(function (h) {
+      const x = q[h.symbol]; if (!x) { missing.push(h.symbol); return Object.assign({}, h); }
+      applied.push(h.symbol);
+      return Object.assign({}, h, { last_price: num(x.price), last_price_date: x.date || h.last_price_date, price_note: "Live · " + (x.source || "vendor") + (x.delay ? " · " + x.delay : "") });
+    });
+    return { holdings: out, applied: applied, missing: missing };
+  }
+
   /* ===== SECTION: PUBLIC API ===== */
   return {
     num: num, fxToHKD: fxToHKD, sortTransactions: sortTransactions, buildPosition: buildPosition, classify: classify,
     splitBy: splitBy, computePortfolio: computePortfolio, runDataChecks: runDataChecks,
     parseCSV: parseCSV, IMPORT_FIELDS: IMPORT_FIELDS, guessMapping: guessMapping, normaliseTicker: normaliseTicker,
     parseDate: parseDate, normaliseType: normaliseType, txKey: txKey, validateImport: validateImport, applyImport: applyImport,
-    holdingsCSV: holdingsCSV, transactionsCSV: transactionsCSV
+    holdingsCSV: holdingsCSV, transactionsCSV: transactionsCSV,
+    PEG: PEG, pegPosition: pegPosition, spreadBp: spreadBp, crossRate: crossRate, seriesChange: seriesChange, alignSpread: alignSpread, zScore: zScore,
+    FRESH_STATES: FRESH_STATES, feedFreshness: feedFreshness, hktStamp: hktStamp, nextMeeting: nextMeeting, pickLatest: pickLatest, applyLiveQuotes: applyLiveQuotes
   };
 })();
 

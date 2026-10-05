@@ -1,0 +1,53 @@
+{
+ "id": "rss_scmp",
+ "fetched_at": "2026-10-05T06:23:21.976Z",
+ "last_ok_at": "2026-10-05T06:23:21.976Z",
+ "status": "ok",
+ "url": "https://www.scmp.com/rss/92/feed/",
+ "as_of": "2026-10-05",
+ "data": {
+  "items": [
+   {
+    "title": "Hong Kong poised for first listed property debt fund as banks pull back",
+    "url": "https://www.scmp.com/business/banking-finance/article/3369764/hong-kong-poised-first-listed-property-debt-fund-banks-pull-back?utm_source=rss_feed",
+    "time": "2026-10-05T06:03:24.000Z"
+   },
+   {
+    "title": "Huawei, Qualcomm strike multi-year patent agreement across 5G, AI",
+    "url": "https://www.scmp.com/tech/tech-trends/article/3369748/huawei-qualcomm-strike-multi-year-patent-agreement-across-5g-ai?utm_source=rss_feed",
+    "time": "2026-10-05T06:00:10.000Z"
+   },
+   {
+    "title": "Wellcome operator DFI Retail seeks buyer for fully leased shopping centre on The Peak",
+    "url": "https://www.scmp.com/business/article/3369744/wellcome-operator-dfi-retail-seeks-buyer-fully-leased-shopping-centre-peak?utm_source=rss_feed",
+    "time": "2026-10-05T04:30:06.000Z"
+   },
+   {
+    "title": "Asset manager Schroders to expand in Hong Kong after merger with Nuveen, CEO says",
+    "url": "https://www.scmp.com/business/banking-finance/article/3369699/asset-manager-schroders-expand-hong-kong-after-merger-nuveen-ceo-says?utm_source=rss_feed",
+    "time": "2026-10-05T03:00:06.000Z"
+   },
+   {
+    "title": "The Live Conversation: Education Beyond the Checklist",
+    "url": "https://www.scmp.com/business/article/3369560/live-conversation-education-beyond-checklist?utm_source=rss_feed",
+    "time": "2026-10-05T02:36:46.000Z"
+   },
+   {
+    "title": "Temu took the world by storm – but has the shopping app lost its thunder?",
+    "url": "https://www.scmp.com/tech/big-tech/article/3369595/temu-took-world-storm-has-shopping-app-lost-its-thunder?utm_source=rss_feed",
+    "time": "2026-10-05T02:00:19.000Z"
+   },
+   {
+    "title": "Quant funds are ‘necessary’ to China’s ascent as financial powerhouse: investor",
+    "url": "https://www.scmp.com/business/banking-finance/article/3369650/quant-funds-are-necessary-chinas-ascent-financial-powerhouse-investor?utm_source=rss_feed",
+    "time": "2026-10-05T00:00:35.000Z"
+   },
+   {
+    "title": "C-Suite Member Spotlight: 140 Years of Everyday Moments",
+    "url": "https://www.scmp.com/presented/business/topics/c-suite-content-hub/article/3369345/140-years-everyday-moments?utm_source=rss_feed",
+    "time": "2026-10-04T21:00:12.000Z"
+   }
+  ]
+ },
+ "ms": 212
+}

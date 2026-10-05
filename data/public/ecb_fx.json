@@ -1,0 +1,200 @@
+{
+ "id": "ecb_fx",
+ "fetched_at": "2026-10-05T06:21:29.932Z",
+ "last_ok_at": "2026-10-05T06:21:29.932Z",
+ "status": "ok",
+ "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.HKD+USD.EUR.SP00.A?lastNObservations=30&format=csvdata",
+ "as_of": "2026-10-02",
+ "data": {
+  "latest": {
+   "date": "2026-10-02",
+   "hkd_per_eur": 8.8084,
+   "usd_per_eur": 1.1225,
+   "usd_hkd_cross": 7.84713
+  },
+  "series": [
+   {
+    "date": "2026-10-02",
+    "hkd_per_eur": 8.8084,
+    "usd_per_eur": 1.1225,
+    "usd_hkd_cross": 7.84713
+   },
+   {
+    "date": "2026-10-01",
+    "hkd_per_eur": 8.8658,
+    "usd_per_eur": 1.1298,
+    "usd_hkd_cross": 7.84723
+   },
+   {
+    "date": "2026-09-30",
+    "hkd_per_eur": 8.9095,
+    "usd_per_eur": 1.1355,
+    "usd_hkd_cross": 7.84632
+   },
+   {
+    "date": "2026-09-29",
+    "hkd_per_eur": 8.9091,
+    "usd_per_eur": 1.1355,
+    "usd_hkd_cross": 7.84597
+   },
+   {
+    "date": "2026-09-28",
+    "hkd_per_eur": 8.9258,
+    "usd_per_eur": 1.1378,
+    "usd_hkd_cross": 7.84479
+   },
+   {
+    "date": "2026-09-25",
+    "hkd_per_eur": 8.9445,
+    "usd_per_eur": 1.1403,
+    "usd_hkd_cross": 7.84399
+   },
+   {
+    "date": "2026-09-24",
+    "hkd_per_eur": 8.9148,
+    "usd_per_eur": 1.1367,
+    "usd_hkd_cross": 7.8427
+   },
+   {
+    "date": "2026-09-23",
+    "hkd_per_eur": 8.9506,
+    "usd_per_eur": 1.1411,
+    "usd_hkd_cross": 7.84383
+   },
+   {
+    "date": "2026-09-22",
+    "hkd_per_eur": 8.9909,
+    "usd_per_eur": 1.1463,
+    "usd_hkd_cross": 7.84341
+   },
+   {
+    "date": "2026-09-21",
+    "hkd_per_eur": 9.0144,
+    "usd_per_eur": 1.149,
+    "usd_hkd_cross": 7.84543
+   },
+   {
+    "date": "2026-09-18",
+    "hkd_per_eur": 8.9903,
+    "usd_per_eur": 1.146,
+    "usd_hkd_cross": 7.84494
+   },
+   {
+    "date": "2026-09-17",
+    "hkd_per_eur": 9.0071,
+    "usd_per_eur": 1.1481,
+    "usd_hkd_cross": 7.84522
+   },
+   {
+    "date": "2026-09-16",
+    "hkd_per_eur": 9.0507,
+    "usd_per_eur": 1.1537,
+    "usd_hkd_cross": 7.84493
+   },
+   {
+    "date": "2026-09-15",
+    "hkd_per_eur": 9.0518,
+    "usd_per_eur": 1.1539,
+    "usd_hkd_cross": 7.84453
+   },
+   {
+    "date": "2026-09-14",
+    "hkd_per_eur": 9.0599,
+    "usd_per_eur": 1.1551,
+    "usd_hkd_cross": 7.84339
+   },
+   {
+    "date": "2026-09-11",
+    "hkd_per_eur": 9.0904,
+    "usd_per_eur": 1.1592,
+    "usd_hkd_cross": 7.84196
+   },
+   {
+    "date": "2026-09-10",
+    "hkd_per_eur": 9.1083,
+    "usd_per_eur": 1.1616,
+    "usd_hkd_cross": 7.84117
+   },
+   {
+    "date": "2026-09-09",
+    "hkd_per_eur": 9.1378,
+    "usd_per_eur": 1.1652,
+    "usd_hkd_cross": 7.84226
+   },
+   {
+    "date": "2026-09-08",
+    "hkd_per_eur": 9.1068,
+    "usd_per_eur": 1.1614,
+    "usd_hkd_cross": 7.84123
+   },
+   {
+    "date": "2026-09-07",
+    "hkd_per_eur": 9.1119,
+    "usd_per_eur": 1.1622,
+    "usd_hkd_cross": 7.84022
+   },
+   {
+    "date": "2026-09-04",
+    "hkd_per_eur": 9.112,
+    "usd_per_eur": 1.1622,
+    "usd_hkd_cross": 7.8403
+   },
+   {
+    "date": "2026-09-03",
+    "hkd_per_eur": 9.1078,
+    "usd_per_eur": 1.1615,
+    "usd_hkd_cross": 7.84141
+   },
+   {
+    "date": "2026-09-02",
+    "hkd_per_eur": 9.0801,
+    "usd_per_eur": 1.1578,
+    "usd_hkd_cross": 7.84255
+   },
+   {
+    "date": "2026-09-01",
+    "hkd_per_eur": 9.0877,
+    "usd_per_eur": 1.159,
+    "usd_hkd_cross": 7.84098
+   },
+   {
+    "date": "2026-08-31",
+    "hkd_per_eur": 9.0888,
+    "usd_per_eur": 1.1596,
+    "usd_hkd_cross": 7.83788
+   },
+   {
+    "date": "2026-08-28",
+    "hkd_per_eur": 9.1276,
+    "usd_per_eur": 1.1643,
+    "usd_hkd_cross": 7.83956
+   },
+   {
+    "date": "2026-08-27",
+    "hkd_per_eur": 9.1282,
+    "usd_per_eur": 1.1645,
+    "usd_hkd_cross": 7.83873
+   },
+   {
+    "date": "2026-08-26",
+    "hkd_per_eur": 9.1463,
+    "usd_per_eur": 1.1669,
+    "usd_hkd_cross": 7.83812
+   },
+   {
+    "date": "2026-08-25",
+    "hkd_per_eur": 9.1407,
+    "usd_per_eur": 1.1662,
+    "usd_hkd_cross": 7.83802
+   },
+   {
+    "date": "2026-08-24",
+    "hkd_per_eur": 9.1408,
+    "usd_per_eur": 1.1664,
+    "usd_hkd_cross": 7.83676
+   }
+  ],
+  "note": "Derived: USD/HKD = (HKD per EUR) ÷ (USD per EUR), ECB 14:15 CET reference rates"
+ },
+ "ms": 106192
+}

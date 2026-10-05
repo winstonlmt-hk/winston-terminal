@@ -1,0 +1,69 @@
+{
+ "id": "datagovhk",
+ "fetched_at": "2026-10-05T06:23:22.189Z",
+ "last_ok_at": "2026-10-05T06:23:22.189Z",
+ "status": "ok",
+ "url": "https://data.gov.hk/en-data/api/3/action/package_search",
+ "as_of": "2026-10-05",
+ "data": {
+  "datasets": [
+   {
+    "name": "hk-censtatd-tablechart-340-46001",
+    "title": "Exchange Rates - Table 340-46001 : Exchange rates",
+    "org": "Census and Statistics Department",
+    "url": "https://data.gov.hk/en-data/dataset/hk-censtatd-tablechart-340-46001",
+    "modified": "2026-10-02"
+   },
+   {
+    "name": "hk-censtatd-tablechart-340-46002",
+    "title": "Effective Exchange Rate Indices for Hong Kong Dollar - Table 340-46002 : Effective exchange rate indices for the Hong Kong dollar(January 2020 = 100)",
+    "org": "Census and Statistics Department",
+    "url": "https://data.gov.hk/en-data/dataset/hk-censtatd-tablechart-340-46002",
+    "modified": "2026-10-02"
+   },
+   {
+    "name": "hk-censtatd-tablechart-fa100112",
+    "title": "Feature Articles on Finance - Effective Exchange Rate Index for the Hong Kong Dollar",
+    "org": "Census and Statistics Department",
+    "url": "https://data.gov.hk/en-data/dataset/hk-censtatd-tablechart-fa100112",
+    "modified": "2026-09-03"
+   },
+   {
+    "name": "hk-censtatd-tablechart-340-45021",
+    "title": "Statistics on Money and Financial Markets - Table 340-45021 : Hong Kong Dollar interest rates",
+    "org": "Census and Statistics Department",
+    "url": "https://data.gov.hk/en-data/dataset/hk-censtatd-tablechart-340-45021",
+    "modified": "2026-09-15"
+   },
+   {
+    "name": "hk-censtatd-tablechart-340-45022",
+    "title": "Statistics on Money and Financial Markets - Table 340-45022 : Hong Kong Dollar Interest Settlement Rates",
+    "org": "Census and Statistics Department",
+    "url": "https://data.gov.hk/en-data/dataset/hk-censtatd-tablechart-340-45022",
+    "modified": "2026-09-03"
+   },
+   {
+    "name": "hk-censtatd-tablechart-340-95002",
+    "title": "Statistics on Money and Financial Markets - Table 340-95002 : Average daily turnover of Exchange Fund Bills and Notes issued by the Hong Kong Monetary Authority",
+    "org": "Census and Statistics Department",
+    "url": "https://data.gov.hk/en-data/dataset/hk-censtatd-tablechart-340-95002",
+    "modified": "2026-09-30"
+   },
+   {
+    "name": "hk-hkma-scamalrt-scam-alert",
+    "title": "Scam Alert",
+    "org": "Hong Kong Monetary Authority",
+    "url": "https://data.gov.hk/en-data/dataset/hk-hkma-scamalrt-scam-alert",
+    "modified": "2026-09-30"
+   },
+   {
+    "name": "hk-hkma-banksvf-register-ambs",
+    "title": "Register of AMBs",
+    "org": "Hong Kong Monetary Authority",
+    "url": "https://data.gov.hk/en-data/dataset/hk-hkma-banksvf-register-ambs",
+    "modified": "2026-09-22"
+   }
+  ]
+ },
+ "ms": 987
+}

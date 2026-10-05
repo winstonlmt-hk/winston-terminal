@@ -1,0 +1,188 @@
+{
+ "id": "sec_filings",
+ "fetched_at": "2026-10-05T06:23:16.284Z",
+ "last_ok_at": "2026-10-05T06:23:16.284Z",
+ "status": "ok",
+ "url": "https://data.sec.gov/submissions/CIK##########.json",
+ "as_of": "2026-09-03",
+ "data": {
+  "companies": [
+   {
+    "symbol": "AAPL.US",
+    "name": "Apple Inc.",
+    "cik": "0000320193",
+    "filings": [
+     {
+      "form": "10-Q",
+      "filed": "2026-07-31",
+      "report_date": "2026-06-27",
+      "items": "",
+      "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000020/aapl-20260627.htm"
+     },
+     {
+      "form": "8-K",
+      "filed": "2026-07-30",
+      "report_date": "2026-07-30",
+      "items": "2.02,9.01",
+      "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000018/aapl-20260730.htm"
+     },
+     {
+      "form": "10-Q",
+      "filed": "2026-05-01",
+      "report_date": "2026-03-28",
+      "items": "",
+      "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000013/aapl-20260328.htm"
+     },
+     {
+      "form": "8-K",
+      "filed": "2026-04-30",
+      "report_date": "2026-04-30",
+      "items": "2.02,9.01",
+      "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000011/aapl-20260430.htm"
+     }
+    ]
+   },
+   {
+    "symbol": "MSFT.US",
+    "name": "MICROSOFT CORP",
+    "cik": "0000789019",
+    "filings": [
+     {
+      "form": "8-K",
+      "filed": "2026-09-02",
+      "report_date": "2026-09-02",
+      "items": "7.01,9.01",
+      "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526380280/d291965d8k.htm"
+     },
+     {
+      "form": "10-K",
+      "filed": "2026-07-29",
+      "report_date": "2026-06-30",
+      "items": "",
+      "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/msft-20260630.htm"
+     },
+     {
+      "form": "8-K",
+      "filed": "2026-07-29",
+      "report_date": "2026-07-29",
+      "items": "2.02,9.01",
+      "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323632/msft-20260729.htm"
+     },
+     {
+      "form": "8-K",
+      "filed": "2026-06-05",
+      "report_date": "2026-06-02",
+      "items": "5.02",
+      "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526258667/d26760d8k.htm"
+     }
+    ]
+   },
+   {
+    "symbol": "NVDA.US",
+    "name": "NVIDIA CORP",
+    "cik": "0001045810",
+    "filings": [
+     {
+      "form": "8-K",
+      "filed": "2026-09-03",
+      "report_date": "2026-09-02",
+      "items": "8.01",
+      "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000078/nvda-20260902.htm"
+     },
+     {
+      "form": "10-Q",
+      "filed": "2026-08-26",
+      "report_date": "2026-07-26",
+      "items": "",
+      "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm"
+     },
+     {
+      "form": "8-K",
+      "filed": "2026-08-26",
+      "report_date": "2026-08-26",
+      "items": "2.02,9.01",
+      "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000073/nvda-20260826.htm"
+     },
+     {
+      "form": "8-K",
+      "filed": "2026-08-17",
+      "report_date": "2026-08-17",
+      "items": "1.01,2.03,7.01",
+      "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000069/nvda-20260817.htm"
+     }
+    ]
+   },
+   {
+    "symbol": "JPM.US",
+    "name": "JPMORGAN CHASE & CO",
+    "cik": "0000019617",
+    "filings": [
+     {
+      "form": "10-Q",
+      "filed": "2026-08-06",
+      "report_date": "2026-06-30",
+      "items": "",
+      "url": "https://www.sec.gov/Archives/edgar/data/19617/000162828026054343/jpm-20260630.htm"
+     },
+     {
+      "form": "8-K",
+      "filed": "2026-07-23",
+      "report_date": "2026-07-23",
+      "items": "8.01,9.01",
+      "url": "https://www.sec.gov/Archives/edgar/data/19617/000119312526314128/d103985d8k.htm"
+     },
+     {
+      "form": "8-K",
+      "filed": "2026-07-23",
+      "report_date": "2026-07-21",
+      "items": "5.03",
+      "url": "https://www.sec.gov/Archives/edgar/data/19617/000001961726000288/jpm-20260721.htm"
+     },
+     {
+      "form": "8-K",
+      "filed": "2026-07-14",
+      "report_date": "2026-07-14",
+      "items": "7.01,9.01",
+      "url": "https://www.sec.gov/Archives/edgar/data/19617/000162828026048086/jpm-20260714.htm"
+     }
+    ]
+   },
+   {
+    "symbol": "BRK-B.US",
+    "name": "BERKSHIRE HATHAWAY INC",
+    "cik": "0001067983",
+    "filings": [
+     {
+      "form": "8-K",
+      "filed": "2026-08-11",
+      "report_date": "2026-08-08",
+      "items": "2.02,9.01",
+      "url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526344495/d159922d8k.htm"
+     },
+     {
+      "form": "10-Q",
+      "filed": "2026-08-10",
+      "report_date": "2026-06-30",
+      "items": "",
+      "url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526341032/brka-20260630.htm"
+     },
+     {
+      "form": "8-K",
+      "filed": "2026-05-07",
+      "report_date": "2026-05-02",
+      "items": "2.02,5.02,5.03,5.07,9.01",
+      "url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526212148/d74313d8k.htm"
+     },
+     {
+      "form": "10-Q",
+      "filed": "2026-05-04",
+      "report_date": "2026-03-31",
+      "items": "",
+      "url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526202243/brka-20260331.htm"
+     }
+    ]
+   }
+  ]
+ },
+ "ms": 1582
+}

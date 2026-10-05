@@ -1,0 +1,134 @@
+{
+ "id": "fed_h10",
+ "fetched_at": "2026-10-05T06:21:29.750Z",
+ "last_ok_at": "2026-10-05T06:21:29.750Z",
+ "status": "ok",
+ "url": "https://www.federalreserve.gov/datadownload/Output.aspx?rel=H10&series=60f32914ab61dfab590e0e470153e3ae&lastobs=30&filetype=csv&label=include&layout=seriescolumn",
+ "as_of": "2026-09-25",
+ "data": {
+  "latest": {
+   "date": "2026-09-25",
+   "usd_hkd": 7.8439
+  },
+  "series": [
+   {
+    "date": "2026-09-25",
+    "usd_hkd": 7.8439
+   },
+   {
+    "date": "2026-09-24",
+    "usd_hkd": 7.8423
+   },
+   {
+    "date": "2026-09-23",
+    "usd_hkd": 7.8431
+   },
+   {
+    "date": "2026-09-22",
+    "usd_hkd": 7.8437
+   },
+   {
+    "date": "2026-09-21",
+    "usd_hkd": 7.8456
+   },
+   {
+    "date": "2026-09-18",
+    "usd_hkd": 7.8456
+   },
+   {
+    "date": "2026-09-17",
+    "usd_hkd": 7.8456
+   },
+   {
+    "date": "2026-09-16",
+    "usd_hkd": 7.8447
+   },
+   {
+    "date": "2026-09-15",
+    "usd_hkd": 7.8443
+   },
+   {
+    "date": "2026-09-14",
+    "usd_hkd": 7.8435
+   },
+   {
+    "date": "2026-09-11",
+    "usd_hkd": 7.8427
+   },
+   {
+    "date": "2026-09-10",
+    "usd_hkd": 7.8411
+   },
+   {
+    "date": "2026-09-09",
+    "usd_hkd": 7.8418
+   },
+   {
+    "date": "2026-09-08",
+    "usd_hkd": 7.8412
+   },
+   {
+    "date": "2026-09-04",
+    "usd_hkd": 7.8407
+   },
+   {
+    "date": "2026-09-03",
+    "usd_hkd": 7.8401
+   },
+   {
+    "date": "2026-09-02",
+    "usd_hkd": 7.842
+   },
+   {
+    "date": "2026-09-01",
+    "usd_hkd": 7.8408
+   },
+   {
+    "date": "2026-08-31",
+    "usd_hkd": 7.8387
+   },
+   {
+    "date": "2026-08-28",
+    "usd_hkd": 7.84
+   },
+   {
+    "date": "2026-08-27",
+    "usd_hkd": 7.8388
+   },
+   {
+    "date": "2026-08-26",
+    "usd_hkd": 7.8384
+   },
+   {
+    "date": "2026-08-25",
+    "usd_hkd": 7.8382
+   },
+   {
+    "date": "2026-08-24",
+    "usd_hkd": 7.8358
+   },
+   {
+    "date": "2026-08-21",
+    "usd_hkd": 7.8397
+   },
+   {
+    "date": "2026-08-20",
+    "usd_hkd": 7.8425
+   },
+   {
+    "date": "2026-08-19",
+    "usd_hkd": 7.8403
+   },
+   {
+    "date": "2026-08-18",
+    "usd_hkd": 7.8437
+   },
+   {
+    "date": "2026-08-17",
+    "usd_hkd": 7.8444
+   }
+  ],
+  "note": "HKD per USD, noon buying rate in New York (H.10, released weekly)"
+ },
+ "ms": 181
+}

@@ -1,4 +1,4 @@
-// cmd.js – Winston Terminal v4 (plan v3 Phase 2): Bloomberg-style command line, Ctrl/Cmd+K palette, "?" shortcut sheet and the guided TOUR.
+// cmd.js – Winston Terminal v5 (plan v3 Phase 2; v5 adds MACRO/SRC/LIVE for Phase 3): Bloomberg-style command line, Ctrl/Cmd+K palette, "?" shortcut sheet and the guided TOUR.
 // Grammar (reimplemented from scratch; ideas only from Fincept Terminal's command bar and ZTerminal's "NVDA EQUITY ANL <GO>", no code copied):
 //   SCREEN            type a screen mnemonic to jump (DASH, HOLD, VC, IDEA …)
 //   TICKER [EXCH] [EQUITY] FN [GO]   e.g. 0700 DES · 700 HK DES · NVDA US EQUITY VC <GO> · 2330 TT VC  (exchange codes map to suffixes, HK→.HK)
@@ -27,7 +27,8 @@ const WTCmd = (function () {
     { cmd: "VC", alias: ["SPLC", "CHAIN", "SC"], label: "Value Chain · Supply Chain", page: "valuechain", vcTab: "splc", alt: 6 },
     { cmd: "METH", alias: ["HOW", "METHODOLOGY", "ABOUT"], label: "Methodology", page: "methodology", alt: 7 },
     { cmd: "IDEA", alias: ["IDEAS", "LAB"], label: "Idea Lab (coming soon)", page: "soon-idea", alt: 8 },
-    { cmd: "MACRO", alias: ["PEG", "HKMA", "HIBOR"], label: "HK Macro & Peg (coming soon)", page: "soon-macro", alt: 9 },
+    { cmd: "MACRO", alias: ["PEG", "HKMA", "HIBOR", "USDHKD", "SOFR", "AB"], label: "HK Macro & Peg", page: "macro", alt: 9 },
+    { cmd: "SRC", alias: ["SOURCES", "FEEDS", "DATA"], label: "Data Sources (feed registry, licences, freshness)", page: "sources" },
     { cmd: "BRIEF", alias: ["AM", "MORNING"], label: "Morning Brief (coming soon)", page: "soon-brief" },
     { cmd: "EVT", alias: ["EVENTS", "CAL", "EVENT"], label: "Event Tracker (coming soon)", page: "soon-events" },
     { cmd: "MAP", alias: ["CHAINMAP"], label: "Value Chain · Chain Map", page: "valuechain", vcTab: "map" },
@@ -61,6 +62,7 @@ const WTCmd = (function () {
     { cmd: "ASK", args: "question", label: "Ask the analyst (copilot is a later phase)", run: function () {
       APP.analyst(true); APP.toast("The Grok analyst comes in a later phase. Nothing was sent anywhere."); return ok("Analyst");
     } },
+    { cmd: "LIVE", label: "Live mode (owner only – passphrase; shows 'Live not configured' without a Worker)", run: function () { if (!window.WT_LIVE) return fail("Live mode isn't loaded."); setTimeout(window.WT_LIVE.open, 0); return ok("Live mode"); } },
     { cmd: "CLR", alias: ["CLEAR"], label: "Clear command history", run: function () { hist = []; saveHist(); return ok("History cleared"); } }
   ];
   const SCREEN_BY = {}, VERB_BY = {};

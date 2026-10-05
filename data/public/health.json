@@ -1,0 +1,174 @@
+{
+ "id": "health",
+ "checked_at": "2026-10-05T06:43:52.737Z",
+ "runner": "local",
+ "ok": 14,
+ "total": 18,
+ "results": [
+  {
+   "id": "hkma_liquidity",
+   "ok": false,
+   "status": 405,
+   "ms": 702,
+   "bytes": 2569,
+   "note": "HTTP 405 – HTML error page (gateway firewall block, usually temporary)"
+  },
+  {
+   "id": "hkma_er",
+   "ok": false,
+   "status": 405,
+   "ms": 711,
+   "bytes": 2569,
+   "note": "HTTP 405 – HTML error page (gateway firewall block, usually temporary)"
+  },
+  {
+   "id": "hkma_hibor",
+   "ok": false,
+   "status": 405,
+   "ms": 711,
+   "bytes": 2569,
+   "note": "HTTP 405 – HTML error page (gateway firewall block, usually temporary)"
+  },
+  {
+   "id": "nyfed_sofr",
+   "ok": true,
+   "status": 200,
+   "ms": 199,
+   "bytes": 256,
+   "note": ""
+  },
+  {
+   "id": "nyfed_effr",
+   "ok": true,
+   "status": 200,
+   "ms": 36,
+   "bytes": 301,
+   "note": ""
+  },
+  {
+   "id": "ust_curve",
+   "ok": true,
+   "status": 200,
+   "ms": 19276,
+   "bytes": 3763,
+   "note": ""
+  },
+  {
+   "id": "fed_h10",
+   "ok": true,
+   "status": 200,
+   "ms": 183,
+   "bytes": 1990,
+   "note": ""
+  },
+  {
+   "id": "ecb_fx",
+   "ok": true,
+   "status": 200,
+   "ms": 887,
+   "bytes": 534,
+   "note": ""
+  },
+  {
+   "id": "fomc_calendar",
+   "ok": true,
+   "status": 200,
+   "ms": 119,
+   "bytes": 165455,
+   "note": ""
+  },
+  {
+   "id": "sec_filings",
+   "ok": true,
+   "status": 200,
+   "ms": 147,
+   "bytes": 163997,
+   "note": ""
+  },
+  {
+   "id": "sec_8k_atom",
+   "ok": true,
+   "status": 200,
+   "ms": 203,
+   "bytes": 7961,
+   "note": ""
+  },
+  {
+   "id": "rss_fed",
+   "ok": true,
+   "status": 200,
+   "ms": 24,
+   "bytes": 14716,
+   "note": ""
+  },
+  {
+   "id": "rss_sec",
+   "ok": true,
+   "status": 200,
+   "ms": 37,
+   "bytes": 18368,
+   "note": ""
+  },
+  {
+   "id": "rss_hkgov",
+   "ok": true,
+   "status": 200,
+   "ms": 1873,
+   "bytes": 369975,
+   "note": ""
+  },
+  {
+   "id": "rss_rthk",
+   "ok": true,
+   "status": 200,
+   "ms": 2854,
+   "bytes": 50724,
+   "note": ""
+  },
+  {
+   "id": "rss_scmp",
+   "ok": true,
+   "status": 200,
+   "ms": 219,
+   "bytes": 82722,
+   "note": ""
+  },
+  {
+   "id": "gdelt",
+   "ok": false,
+   "status": 429,
+   "ms": 10629,
+   "bytes": 444,
+   "note": "HTTP 429 – Please limit requests to one every 5 seconds or contact kalev.leetaru5@gmail.com for larger queries. All high-traffic us"
+  },
+  {
+   "id": "datagovhk",
+   "ok": true,
+   "status": 200,
+   "ms": 576,
+   "bytes": 8933,
+   "note": ""
+  },
+  {
+   "id": "fred",
+   "ok": null,
+   "status": "skipped",
+   "note": "FRED_API_KEY not set (optional)",
+   "ms": 0
+  },
+  {
+   "id": "eodhd",
+   "ok": null,
+   "status": "skipped",
+   "note": "vendor source – checked by the Worker's /health only",
+   "ms": 0
+  },
+  {
+   "id": "finnhub",
+   "ok": null,
+   "status": "skipped",
+   "note": "vendor source – checked by the Worker's /health only",
+   "ms": 0
+  }
+ ]
+}

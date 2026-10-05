@@ -1,6 +1,8 @@
 <!-- index.html – Winston Terminal v4: page skeleton. app.js fills the content; vc-app.js fills Value Chain; methodology.js fills Methodology.
      v3 (polish foundation): polish.css, header data-quality chips, dashboard loading skeleton, watermark, deferred scripts.
-     v4: Supply Chain tab (vc-splc.js/.css); Phase 2 command line, palette, shortcut sheet and tour (cmd.js/.css); plan-v3 coming-soon modules. -->
+     v4: Supply Chain tab (vc-splc.js/.css); Phase 2 command line, palette, shortcut sheet and tour (cmd.js/.css); plan-v3 coming-soon modules.
+     v5 (Phase 3): HK Macro & Peg + Data Sources pages (macro.js/.css), public feed snapshot data/feeds.js (GitHub Actions), feed registry,
+     header data chip, Demo/Live pill and owner-only Live mode (live.js + config.js → Cloudflare Worker). No keys in this page. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,6 +19,7 @@
   <link rel="stylesheet" href="polish.css">
   <link rel="stylesheet" href="vc-splc.css">
   <link rel="stylesheet" href="cmd.css">
+  <link rel="stylesheet" href="macro.css">
 </head>
 <body class="is-loading">
   <!-- ===== SECTION: SIDEBAR ===== -->
@@ -32,12 +35,13 @@
       <a href="#import" data-page="import">Import / Export</a>
       <a href="#settings" data-page="settings">Rules &amp; Settings</a>
       <a href="#valuechain" data-page="valuechain">Value Chain</a>
+      <a href="#macro" data-page="macro">HK Macro &amp; Peg</a>
       <div class="nav-label">Coming soon</div>
       <a href="#soon-idea" data-page="soon-idea" class="soon">Idea Lab</a>
-      <a href="#soon-macro" data-page="soon-macro" class="soon">HK Macro &amp; Peg</a>
       <a href="#soon-brief" data-page="soon-brief" class="soon">Morning Brief</a>
       <a href="#soon-events" data-page="soon-events" class="soon">Event Tracker</a>
       <div class="nav-label">About</div>
+      <a href="#sources" data-page="sources">Data Sources</a>
       <a href="#methodology" data-page="methodology">Methodology</a>
     </nav>
   </aside>
@@ -48,11 +52,12 @@
       <span class="title">WINSTON TERMINAL</span>
       <span class="clock mono" id="clock" title="Hong Kong time">--:--:-- HKT</span>
       <span id="mode-badge"></span>
+      <button type="button" class="live-pill mono unconf" id="live-pill" aria-pressed="false" title="Demo data. Live mode is owner-only.">○ DEMO DATA</button>
       <span class="fx-chip mono" id="fx-chip"></span>
       <span class="dq" id="dq" title="Data quality">
         <a class="checks-chip mono" id="checks-chip" href="#dashboard" data-action="goto-checks">Checks –/7</a>
         <a class="dq-chip mono" id="vc-chip" href="#valuechain" hidden></a>
-        <span class="dq-chip mono" id="fresh-chip"></span>
+        <a class="dq-chip mono" id="fresh-chip" href="#sources"></a>
       </span>
       <!-- v4 Phase 2: command line row (cmd.js wires it; Ctrl/Cmd+K palette, ? sheet, guided tour) -->
       <div class="cmdbar" id="cmdbar">
@@ -92,6 +97,8 @@
       <section class="page" id="page-import"></section>
       <section class="page" id="page-settings"></section>
       <section class="page" id="page-valuechain"></section>
+      <section class="page" id="page-macro"></section>
+      <section class="page" id="page-sources"></section>
       <section class="page" id="page-methodology"></section>
       <section class="page" id="page-soon"></section>
     </main>
@@ -118,15 +125,20 @@
   <div class="watermark" id="watermark" aria-hidden="true">DEMO PORTFOLIO · ILLUSTRATIVE PRICES</div>
   <noscript><p class="noscript">Winston Terminal needs JavaScript switched on.</p></noscript>
 
-  <!-- ===== SECTION: SCRIPTS (Chart.js 4.4.4 loads async – app.js draws charts when it arrives; the rest deferred in order: data, vc-data, calc, vc-calc, vc-splc, vc-app, methodology, app, cmd) ===== -->
+  <!-- ===== SECTION: SCRIPTS (Chart.js 4.4.4 loads async – app.js draws charts when it arrives; the rest deferred in order: data, vc-data, feeds-registry, data/feeds, config, calc, vc-calc, vc-splc, vc-app, methodology, macro, live, app, cmd) ===== -->
   <script async id="chartjs-cdn" src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" onload="window.WT_CHART_STATE='ready'" onerror="window.WT_CHART_STATE='failed'"></script>
   <script defer src="data.js"></script>
   <script defer src="vc-data.js"></script>
+  <script defer src="feeds-registry.js"></script>
+  <script defer src="data/feeds.js"></script>
+  <script defer src="config.js"></script>
   <script defer src="calc.js"></script>
   <script defer src="vc-calc.js"></script>
   <script defer src="vc-splc.js"></script>
   <script defer src="vc-app.js"></script>
   <script defer src="methodology.js"></script>
+  <script defer src="macro.js"></script>
+  <script defer src="live.js"></script>
   <script defer src="app.js"></script>
   <script defer src="cmd.js"></script>
 </body>
